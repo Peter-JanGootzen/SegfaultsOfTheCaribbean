@@ -1,4 +1,4 @@
-# Segfaults of the Caribbean
+# Segfaults of the Caribbean 
 
 ## Rules of the vessel
 - No use of the STL
