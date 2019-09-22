@@ -1,0 +1,107 @@
+@startuml
+title Segfaults of the Caribbean - Class Diagram
+
+' Model layer
+package Models {
+    class Player {
+        +int Money
+    }
+    class Ship {
+        +int Money
+        +string Price
+        +int CargoSpace
+        +int Price
+        +int Health
+        +int DestinationDistance
+    }
+    class Cannon
+    enum CannonType {
+        Light
+        Medium
+        Heavy
+    }
+    class World
+    class Harbor {
+        +string Name
+    }
+    class HarborDistance {
+        +Harbor from
+        +Harbor to
+        +int distance
+    }
+    class Good {
+        +string name
+        -int minPrice
+        -int maxPrice
+        -int currentPrice
+        -int minAmount
+        -int maxAmount
+        -int currentAmount
+        +int getAmount()
+        +void randomizeAmount()
+        +int getPrice()
+        +void randomizeAmount()
+    }
+    enum ShipWeight {
+        Light
+        Heavy
+    }
+    enum ShipSize {
+        Small
+        Normal
+    }
+}
+
+' Controller layer
+package Controllers {  
+    class HarborController {
+        +void buyGoods(Player p, string[] args)
+        +void buyCannons(Player p, string[] args)
+        +void buyShip(Player p, string[] args)
+    }
+    note left of HarborController: The arguments for buy* member functions are TBD
+    class BattleController {
+        +void battle()
+    }
+    class SeaController {
+        +void moveShip(Ship s)
+    }
+    class GameController {
+        +void mainLoop()
+    }
+}
+
+' View layer
+package ViewControllers {
+    class CLIViewController {
+        +string GetInput()
+    }
+}
+
+' Relationships
+' Model > Model relationships
+ShipSize "1" *-right- Ship
+ShipWeight "1" *-right- Ship
+Cannon "*" *-up- "1" Ship
+Ship "1" *-right- "1" Player
+Ship "*" *-right- "1" Harbor : For sale
+CannonType "1" *-up- Cannon
+Good "*" *-up- "1" Harbor : For sale
+Good "*" *-up- "1" Ship
+Player "1" *-right- "1" World
+Harbor "*" *-up- "1" World
+HarborDistance "*" *-left- "1" World
+Harbor "1" *-down- "1" Ship : Destination
+
+' Model > Controller relationships
+World "1" *-up- "1" GameController
+
+' Controller > Controller relationships
+SeaController -right- BattleController : Calls Battle() every moveShip with 20% chance
+SeaController -left- GameController
+HarborController -right- GameController
+
+' Controller > View relationships
+CLIViewController -down- GameController
+
+@enduml

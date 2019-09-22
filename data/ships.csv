@@ -1,0 +1,14 @@
+type;prijs;laadruimte;kanonnen;schadepunten;bijzonderheden
+Pinnace;10000;200;8;100;klein, licht
+Sloep;19000;200;14;110;klein,licht
+Brigg;27000;250;16;140;klein,licht
+Barque;36000;250;20;150;klein,licht
+Korvet;60000;350;24;200;licht
+Fluyt;40000;500;16;220;
+Fregat;70000;400;26;220;
+Galjoen;120000;600;36;280;
+Handelsfluyt;50000;800;8;300;log
+Caravel;160000;500;40;300;log
+Carrack;140000;550;40;320;log
+Oorlogsgaljoen;180000;400;46;320;log
+Ship of the Line;200000;400;50;340;log
