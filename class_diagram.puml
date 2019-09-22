@@ -8,7 +8,6 @@ package Models {
     }
     class Ship {
         +int Money
-        +string Price
         +int CargoSpace
         +int Price
         +int Health
@@ -37,9 +36,9 @@ package Models {
         -int minAmount
         -int maxAmount
         -int currentAmount
-        +int getAmount()
-        +void randomizeAmount()
         +int getPrice()
+        +void randomizePrice()
+        +int getAmount()
         +void randomizeAmount()
     }
     enum ShipWeight {
@@ -67,7 +66,7 @@ package Controllers {
         +void moveShip(Ship s)
     }
     class GameController {
-        +void mainLoop()
+        +void gameLoop()
     }
 }
 
