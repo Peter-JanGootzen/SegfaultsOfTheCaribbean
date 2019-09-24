@@ -8,7 +8,7 @@
 class Ship
 {
 public:
-    Ship() = default;
+    Ship();
     Ship(String name, int price, int health, int cargoSpace,
         int cannonCapacity, ShipWeight weight, ShipSize size);
     Ship(Ship&& other);
@@ -38,6 +38,7 @@ public:
     void setShipSize(ShipSize size);
     // Other
     void applyDamage(int damage);
+    void sail(int distance);
 private:
     String name;
     int price;

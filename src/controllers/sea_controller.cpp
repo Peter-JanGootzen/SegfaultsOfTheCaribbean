@@ -16,22 +16,22 @@ void SeaController::sail(Ship& s) {
         case 3 ... 4:
             // Slight wind, move one step closer if the ship is light.
             if(s.getShipWeight() == ShipWeight::Light) {
-                moveShip(s, 1);
+                s.sail(1);
             }
             break;
         case 5 ... 7: 
             // If your ship is heavy, you cannot move.
             if(s.getShipWeight() != ShipWeight::Heavy) {
-                moveShip(s, 1);
+                s.sail(1);
             }
             break;
         case 8 ... 17: 
             // Normal wind, move one step closer
-            moveShip(s, 1);
+            s.sail(1);
             break;
         case 18 ... 19:
             // There is a lot of wind, move two steps closer.
-            moveShip(s, 1);
+            s.sail(2);
             break;
         case 20:
         {
@@ -45,13 +45,13 @@ void SeaController::sail(Ship& s) {
             {
                 case 1 ... 40:
                     // Ship has gone off course.
-                    moveShip(s, -1);
+                    s.sail(-1);
                     break;
                 case 41 ... 80:
                     // Ship did not move.
                 case 81 ... 100:
                     // Ship moved in the right direction.
-                    moveShip(s, 1);
+                    s.sail(1);
                     break;
             }
 

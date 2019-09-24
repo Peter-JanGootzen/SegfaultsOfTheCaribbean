@@ -10,6 +10,10 @@ Ship::Ship(String name, int price, int health, int cargoSpace,
 
            }
 
+Ship::Ship() {
+    this->cargo = nullptr;
+}
+
 Ship::Ship(Ship&& other) {
     // stack
     this->name = other.name;
@@ -57,7 +61,8 @@ Ship& Ship::operator=(Ship&& other) {
         this->cargoSize = other.size;
 
         // heap
-        delete[] this->cargo;
+        if (this->cargo != nullptr)
+            delete[] this->cargo;
         this->cargo = other.cargo;
         other.cargo = nullptr;
     }
@@ -77,7 +82,8 @@ Ship& Ship::operator=(const Ship& other) {
         this->cargoSize = other.size;
 
         // heap
-        delete[] this->cargo;
+        //if (this->cargo != nullptr)
+            delete[] this->cargo;
         this->cargo = new Good[other.size];
         std::memcpy(this->cargo, other.cargo, other.size);
     }
@@ -94,7 +100,14 @@ ShipWeight Ship::getShipWeight() const {
 ShipSize Ship::getShipSize() const {
     return this->size;
 }
+void Ship::applyDamage(int damage) {
+    this->health -= damage;
+}
 
 bool Ship::isSunken() const {
     return this->health <= 0;
+}
+
+void Ship::sail(int distance) {
+    this->destinationDistance -= distance;
 }
