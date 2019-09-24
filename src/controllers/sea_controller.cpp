@@ -4,9 +4,25 @@
 
 SeaController::SeaController() {
 }
-
 void SeaController::sail(Ship& s) {
     //Sea changes
+    int battle = Random::getInstance().getRandomInt(1, 100);
+    switch (battle)
+    {
+        case 1 ... 20:
+            battle_controller.battle(s);
+            break;
+        case 21 ... 100:
+            move(s);
+            break;
+        default:
+            throw std::out_of_range("This shouldn't have happend...");
+            break;
+    }
+}
+
+void SeaController::move(Ship& s) {
+    
     int seaRandom = Random::getInstance().getRandomInt(0, 20);
     switch (seaRandom)
     {
@@ -40,7 +56,7 @@ void SeaController::sail(Ship& s) {
             // 40% Chance that the ship did not move.
             // 20% Chance that the ship moved in the right direction.
             // Because ship was stuck in the storm it is also damaged 1-100%.
-            int storm = Random::getInstance().getRandomInt(0,100);
+            int storm = Random::getInstance().getRandomInt(1,100);
             switch (storm)
             {
                 case 1 ... 40:

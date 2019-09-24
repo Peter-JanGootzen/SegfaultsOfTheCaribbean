@@ -1,6 +1,6 @@
 #ifndef FILE_SHIP_SIZE_HPP
 #define FILE_SHIP_SIZE_HPP
-enum ShipSize
+enum class ShipSize
 {
     Small,
     Normal

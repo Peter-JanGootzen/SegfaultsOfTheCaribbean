@@ -5,7 +5,13 @@
 
 class Player {
 public:
-    Ship& getShip() const;
+    Player();
+    Player(Player&& other);
+    Player(const Player& other) = delete;
+    Player& operator=(Player&& other);
+    Player& operator=(const Player& other) = delete;
+    ~Player();
+    Ship* getShip() const;
     int getMoney() const;
 private:
     Ship* ship;

@@ -56,6 +56,20 @@ std::ostream& operator<<(std::ostream& os, const String& s)
     return os;
 }
 
+String operator<<(const String& r, const String& s)
+{
+    char* buffer = new char[s.size() + r.size() + 1];
+    char* bff_ptr = buffer;
+    std::memcpy(buffer, r.a, r.size());
+    bff_ptr+=r.size();
+    std::memcpy(bff_ptr, s.a, s.size());
+    bff_ptr+=s.size();
+    *bff_ptr = '\0';
+    String string = String(buffer);
+    delete[] buffer;
+    return string;
+};
+
 /// Rule of Five
 // copy constructor, should not kill the other value
 String::String(const String& other) {
@@ -72,9 +86,10 @@ String& String::operator=(const String& other) {
         // stack
         this->n = other.n;
         // heap
-        delete[] this->a;
-        a = new char[other.n];
-        std::memcpy(a, other.a, this->n);
+        if (this->a != nullptr)
+            delete[] this->a;
+        this->a = new char[other.n];
+        std::memcpy(this->a, other.a, this->n);
     }
     return *this;
 }
@@ -94,7 +109,8 @@ String& String::operator=(String&& other) {
         // stack
         n = other.n;
         // heap
-        delete[] a;
+        if (this->a != nullptr)
+            delete[] a;
         a = other.a;
         other.a = nullptr;
     }

@@ -1,8 +1,9 @@
 #ifndef FILE_SHIP_WEIGHT_HPP
 #define FILE_SHIP_WEIGHT_HPP
-enum ShipWeight
+enum class ShipWeight
 {
     Light,
+    Normal,
     Heavy
 };
 #endif

@@ -6,7 +6,8 @@ class CliViewController {
 public:
     CliViewController() = default;
     ~CliViewController() = default;
-    void WriteOutput(String s) const;
+    void writeOutput(String s) const;
+    String getInput() const;
 };
 
 #endif

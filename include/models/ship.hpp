@@ -1,7 +1,7 @@
 #ifndef FILE_SHIP_HPP
 #define FILE_SHIP_HPP
-#include "models/enums/ship_weight.hpp"
 #include "models/enums/ship_size.hpp"
+#include "models/enums/ship_weight.hpp"
 #include "models/good.hpp"
 #include "std/string.hpp"
 
@@ -12,9 +12,9 @@ public:
     Ship(String name, int price, int health, int cargoSpace,
         int cannonCapacity, ShipWeight weight, ShipSize size);
     Ship(Ship&& other);
-    Ship(const Ship& other);
-    Ship &operator=(Ship&& other);
-    Ship &operator=(const Ship& other);
+    Ship(const Ship& other) = delete;
+    Ship& operator=(Ship&& other);
+    Ship& operator=(const Ship& other) = delete;
     ~Ship();
 
     // Getters

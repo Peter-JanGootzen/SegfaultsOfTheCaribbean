@@ -20,6 +20,7 @@ public:
     char& operator[](unsigned int i) const;
     bool operator==(const String& s) const noexcept;
     friend std::ostream& operator<<(std::ostream& os, const String& s);
+    friend String operator<<(const String& r, const String& s);
     ~String();
     int size() const;
 private:
