@@ -7,8 +7,8 @@ package Models {
         +int Money
     }
     class Ship {
-        +int Money
         +int CargoSpace
+        +int CannonCapacity
         +int Price
         +int Health
         +int DestinationDistance
@@ -24,8 +24,6 @@ package Models {
         +string Name
     }
     class HarborDistance {
-        +Harbor from
-        +Harbor to
         +int distance
     }
     class Good {
@@ -77,6 +75,19 @@ package ViewControllers {
     }
 }
 
+' std layer
+package std {
+    class Random {
+
+    }
+    class String {
+        
+    }
+    class Vector {
+
+    }
+}
+
 ' Relationships
 ' Model > Model relationships
 ShipSize "1" *-right- Ship
@@ -91,6 +102,9 @@ Player "1" *-right- "1" World
 Harbor "*" *-up- "1" World
 HarborDistance "*" *-left- "1" World
 Harbor "1" *-down- "1" Ship : Destination
+Harbor "1" *-down- "1" Ship : DockedShip
+Harbor "1" *-down- "*" HarborDistance : From
+Harbor "1" *-down- "*" HarborDistance : To
 
 ' Model > Controller relationships
 World "1" *-up- "1" GameController
