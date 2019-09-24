@@ -81,8 +81,20 @@ Ship& Ship::operator=(const Ship& other) {
         this->cargo = new Good[other.size];
         std::memcpy(this->cargo, other.cargo, other.size);
     }
+    return *this;
 }
 
 Ship::~Ship() {
     delete[] this->cargo;
+}
+
+ShipWeight Ship::getShipWeight() const {
+    return this->weight;
+}
+ShipSize Ship::getShipSize() const {
+    return this->size;
+}
+
+bool Ship::isSunken() const {
+    return this->health <= 0;
 }

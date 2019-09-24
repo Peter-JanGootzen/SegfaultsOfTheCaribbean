@@ -11,7 +11,7 @@ public:
     GameController(World w);
     void gameLoop();
 private:
-    World& world;
+    World world;
     Random random;
     SeaController& seaController;
     HarborController& harborController;

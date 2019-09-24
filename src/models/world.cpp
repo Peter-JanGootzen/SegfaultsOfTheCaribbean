@@ -4,3 +4,7 @@ World::World(Player& player, HarborDistance* harborDistances, unsigned int harbo
             player(player), harborDistances(harborDistances), harborDistancesSize(harborDistancesSize) {
 
 }
+
+Player& World::getPlayer() const {
+    return this->player;
+}
