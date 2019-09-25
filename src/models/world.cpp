@@ -9,6 +9,13 @@ Player& World::getPlayer() const {
     return *this->player;
 }
 
+HarborDistance* const World::getHarborDistances() const {
+    return this->harborDistances;
+}
+unsigned int World::getHarborDistancesSize() const {
+    return this->harborDistancesSize;
+}
+
 World::~World() {
     delete player;
     delete[] harborDistances;

@@ -3,14 +3,18 @@
 #include "models/ship.hpp"
 #include "std/random.hpp"
 #include "controllers/battle_controller.hpp"
+#include "view_controllers/cli_view_controller.hpp"
+#include "models/world.hpp"
 
 class SeaController {
 public:
-    SeaController();
-    void sail(Ship& s);
-    void move(Ship& s);
+    SeaController(World& w, CliViewController& cliViewController);
+    void sail(Ship* s);
+    void move(Ship* s);
 private:
-    BattleController battle_controller;
+    World& world;
+    CliViewController& cliViewController;
+    BattleController battleController;
 };
 
 #endif

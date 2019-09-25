@@ -4,6 +4,8 @@
 #include "models/ship.hpp"
 #include "models/good.hpp"
 
+class Ship;
+
 class Harbor {
 public:
     Harbor();
@@ -13,10 +15,9 @@ public:
     Harbor& operator=(Harbor&& other);
     Harbor& operator=(const Harbor& other) = delete;
     Harbor(String name, Ship* shipsForSale, unsigned int shipsForSaleSize, Good* goodsForSale, unsigned int goodsForSaleSize);
+    String getName() const;
 private:
     String name;
-    // Is not the owner
-    Ship* dockedShip;
     Ship* shipsForSale; 
     unsigned int shipsForSaleSize;
     Good* goodsForSale;

@@ -1,7 +1,7 @@
 #include "models/harbor.hpp"
+#include "models/ship.hpp"
 
 Harbor::Harbor() {
-    this->dockedShip = nullptr;
     this->goodsForSale = nullptr;
     this->shipsForSale = nullptr;
 };
@@ -12,6 +12,10 @@ Harbor::Harbor(String name, Ship* shipsForSale, unsigned int shipsForSaleSize,
 
 };
 
+String Harbor::getName() const {
+    return this->name;
+};
+
 Harbor::Harbor(Harbor&& other) {
     // stack
     this->goodsForSaleSize = other.goodsForSaleSize;
@@ -19,8 +23,6 @@ Harbor::Harbor(Harbor&& other) {
     this->name = other.name;
 
     // heap
-    this->dockedShip = other.dockedShip;
-    other.dockedShip = nullptr;
     this->goodsForSale = other.goodsForSale;
     other.goodsForSale = nullptr;
     this->shipsForSale = other.shipsForSale;
@@ -37,10 +39,6 @@ Harbor& Harbor::operator=(Harbor&& other) {
         this->name = other.name;
 
         // heap
-        if (this->dockedShip != nullptr)
-            delete this->dockedShip;
-        this->dockedShip = other.dockedShip;
-        other.dockedShip = nullptr;
         if (this->goodsForSale != nullptr)
             delete[] this->goodsForSale;
         this->goodsForSale = other.goodsForSale;

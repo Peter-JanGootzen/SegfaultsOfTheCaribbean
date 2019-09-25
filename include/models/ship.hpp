@@ -3,7 +3,10 @@
 #include "models/enums/ship_size.hpp"
 #include "models/enums/ship_weight.hpp"
 #include "models/good.hpp"
+#include "models/harbor.hpp"
 #include "std/string.hpp"
+
+class Harbor;
 
 class Ship
 {
@@ -26,7 +29,9 @@ public:
     int getDestinationDistance() const;
     ShipWeight getShipWeight() const;
     ShipSize getShipSize() const;
+    Harbor* const getCurrentHarbor() const;
     bool isSunken() const;
+    bool isDocked() const;
     // Setters
     void setName(String name);
     void setHealth(int health);
@@ -39,6 +44,7 @@ public:
     // Other
     void applyDamage(int damage);
     void sail(int distance);
+    void dock();
 private:
     String name;
     int price;
@@ -46,10 +52,14 @@ private:
     int cannonCapacity;
     int health;
     int destinationDistance;
+    // Not the owner!
+    Harbor* destination;
     ShipWeight weight;
     ShipSize size;
     Good* cargo;
     unsigned int cargoSize;
+    // Not the owner!
+    Harbor* currentHarbor;
 };
 
 #endif

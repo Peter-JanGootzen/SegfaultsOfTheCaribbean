@@ -24,6 +24,11 @@ String::String(unsigned int size, const char* buffer) {
 int String::size() const {
     return n;
 };
+
+char* String::c_str() const {
+    return a;
+};
+
 String String::operator+(const String& s) {
     int newSize = n + s.size();
     auto newBuffer = new char[newSize];

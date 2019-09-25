@@ -12,12 +12,14 @@ public:
     World& operator=(World&& other);
     World& operator=(const World& other) = delete;
     Player& getPlayer() const;
+    HarborDistance* const getHarborDistances() const;
+    unsigned int getHarborDistancesSize() const;
 private:
     Player* player;
     HarborDistance* harborDistances;
+    unsigned int harborDistancesSize;
     Harbor* harbors;
     unsigned int harborsSize;
-    unsigned int harborDistancesSize;
 };
 
 #endif

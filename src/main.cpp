@@ -26,9 +26,9 @@ int main(int argc, char const *argv[])
     harbors[1] = Harbor(String("Belize"), belizeShipsForSale, 2, belizeGoods, 2);
     auto harborDistances = new HarborDistance[1];
     harborDistances[0] = HarborDistance(&harbors[0], &harbors[1], 2);
-    World world = World(player, harbors, 2, harborDistances, 1);
+    World* world = new World(player, harbors, 2, harborDistances, 1);
 
-    GameController gc { std::move(world) };
+    GameController gc { world };
     
     gc.start();
     gc.gameLoop();

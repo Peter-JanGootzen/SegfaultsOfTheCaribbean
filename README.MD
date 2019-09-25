@@ -3,7 +3,6 @@
 ## Rules of the vessel
 - No use of the STL
 - No use of external libraries
-- No use of templates
 - No use of the c++ string type
 - No use of Smart Pointers
 - Everything must be const correct

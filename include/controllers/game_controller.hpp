@@ -9,13 +9,13 @@
 
 class GameController {
 public:
-    GameController(World w);
+    GameController(World* w);
     ~GameController();
 
     void start();
     void gameLoop();
 private:
-    World world;
+    World* world;
     Random random;
     SeaController* seaController;
     HarborController* harborController;

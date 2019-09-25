@@ -3,13 +3,22 @@
 #include "std/string.hpp"
 #include "models/player.hpp"
 #include "models/ship.hpp"
+#include "view_controllers/cli_view_controller.hpp"
+#include "models/world.hpp"
 
 class HarborController {
 public:
-    HarborController();
-    void buyGoods(Player p);
-    void buyCannons(Player p);
-    void buyShip(Player p);
+    HarborController(World& w, CliViewController& cliViewController);
+    void buyGoods();
+    void buyCannons();
+    void buyShip();
+    void repairShip();
+    void dockShip();
+    void setSail();
+    void quitGame();
+    void presentOptions();
 private:
+    World& world;
+    CliViewController& cliViewController;
 };
 #endif
