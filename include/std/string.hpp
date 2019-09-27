@@ -21,6 +21,7 @@ public:
     bool operator==(const String& s) const noexcept;
     friend std::ostream& operator<<(std::ostream& os, const String& s);
     friend String operator<<(const String& r, const String& s);
+    friend String operator<<(const String& s, int i);
     ~String();
     int size() const;
     char* c_str() const;

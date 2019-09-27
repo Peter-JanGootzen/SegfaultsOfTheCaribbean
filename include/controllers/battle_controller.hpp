@@ -10,6 +10,7 @@ public:
     BattleController(World& w, CliViewController& cliViewController);
     void battle(Ship* s);
 private:
+    Ship spawnPirateShip();
     World& world;
     CliViewController& cliViewController;
 };

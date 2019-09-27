@@ -4,6 +4,7 @@
 #include "models/enums/ship_weight.hpp"
 #include "models/good.hpp"
 #include "models/harbor.hpp"
+#include "models/cannon.hpp"
 #include "std/string.hpp"
 
 class Harbor;
@@ -12,7 +13,7 @@ class Ship
 {
 public:
     Ship();
-    Ship(String name, int price, int health, int cargoSpace,
+    Ship(String name, int price, int maxHealth, int cargoSpace,
         int cannonCapacity, ShipWeight weight, ShipSize size);
     Ship(Ship&& other);
     Ship(const Ship& other) = delete;
@@ -30,6 +31,9 @@ public:
     ShipWeight getShipWeight() const;
     ShipSize getShipSize() const;
     Harbor* const getCurrentHarbor() const;
+    Harbor* const getDestination() const;
+    Good* const getCargo() const;
+    int getCargoSize() const;
     bool isSunken() const;
     bool isDocked() const;
     // Setters
@@ -39,17 +43,22 @@ public:
     void setCargoSpace(int cargoSpace);
     void setCannonCapacity(int cannonCapacity);
     void setDestinationDistance(int destinationDistance);
+    void setCurrentHarbor(Harbor* harbor);
+    void setDestination(Harbor* destination);
     void setShipWeight(ShipWeight weight);
     void setShipSize(ShipSize size);
     // Other
+    void addCannon(Cannon* cannon);
     void applyDamage(int damage);
     void sail(int distance);
     void dock();
+    void repair(int amount);
 private:
     String name;
     int price;
     int cargoSpace;
     int cannonCapacity;
+    int maxHealth;
     int health;
     int destinationDistance;
     // Not the owner!

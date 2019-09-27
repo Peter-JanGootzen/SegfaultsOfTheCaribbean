@@ -8,9 +8,10 @@ public:
     Good();
     Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount);
     String name;
-    int getPrice();
+    int getPrice() const;
+    String getName() const;
     void randomizePrice();
-    int getAmount();
+    int getAmount() const;
     void randomizeAmount();
 private:
     int minPrice;

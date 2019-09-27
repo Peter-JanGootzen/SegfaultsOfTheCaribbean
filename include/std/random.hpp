@@ -6,10 +6,10 @@ class Random {
 
 public:
     Random();
+    ~Random()  { int i = 0; }
     int getRandomInt(int min, int max);
     static Random& getInstance();
 private:
-    static Random* instance;
     std::random_device device;
     std::default_random_engine dre;
 };

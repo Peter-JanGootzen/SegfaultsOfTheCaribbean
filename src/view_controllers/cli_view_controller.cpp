@@ -8,7 +8,9 @@ void CliViewController::writeOutput(String s) const {
 }
 
 String CliViewController::getInput() const {
-    char buffer[1000];
+    char* buffer = new char[1000];
     std::cin.getline(buffer, 1000);
-    return String(buffer);
+    String input = String(buffer);
+    delete[] buffer;
+    return input;
 }

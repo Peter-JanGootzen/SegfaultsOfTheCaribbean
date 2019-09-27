@@ -14,6 +14,8 @@ public:
     Player& getPlayer() const;
     HarborDistance* const getHarborDistances() const;
     unsigned int getHarborDistancesSize() const;
+    Harbor* const getHarbors() const;
+    unsigned int getHarborsSize() const;
 private:
     Player* player;
     HarborDistance* harborDistances;

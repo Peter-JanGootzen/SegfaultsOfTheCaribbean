@@ -9,8 +9,8 @@
 class SeaController {
 public:
     SeaController(World& w, CliViewController& cliViewController);
-    void sail(Ship* s);
-    void move(Ship* s);
+    bool sail();
+    void move();
 private:
     World& world;
     CliViewController& cliViewController;

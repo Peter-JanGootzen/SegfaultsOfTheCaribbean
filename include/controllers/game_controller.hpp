@@ -16,7 +16,6 @@ public:
     void gameLoop();
 private:
     World* world;
-    Random random;
     SeaController* seaController;
     HarborController* harborController;
     CliViewController* cliViewController;

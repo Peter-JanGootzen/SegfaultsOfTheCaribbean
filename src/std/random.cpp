@@ -1,13 +1,9 @@
 #include "std/random.hpp"
 #include <random>
 
-
-Random* Random::instance = 0;
-
 Random& Random::getInstance(){
-    if(instance == 0)
-        instance = new Random();
-    return *instance;
+    static Random INSTANCE;
+    return INSTANCE;
 }
 
 Random::Random() {

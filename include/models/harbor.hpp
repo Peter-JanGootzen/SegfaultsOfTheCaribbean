@@ -16,6 +16,11 @@ public:
     Harbor& operator=(const Harbor& other) = delete;
     Harbor(String name, Ship* shipsForSale, unsigned int shipsForSaleSize, Good* goodsForSale, unsigned int goodsForSaleSize);
     String getName() const;
+
+    Good* const getGoodsForSale() const;
+    unsigned int getGoodsForSaleSize() const;
+    Ship* const getShipsForSale() const;
+    unsigned int getShipsForSaleSize() const;
 private:
     String name;
     Ship* shipsForSale; 

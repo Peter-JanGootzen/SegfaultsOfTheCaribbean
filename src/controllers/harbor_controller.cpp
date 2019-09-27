@@ -6,72 +6,95 @@
 HarborController::HarborController(World& w, CliViewController& cliViewController) : world(w), cliViewController(cliViewController) {
 }
 
-void HarborController::quitGame() {
-    this->cliViewController.writeOutput(String("Segmentation Fault (core dumped)"));
-    this->cliViewController.writeOutput(String("Gnome im kdeing, you quit the game..."));
-    exit(0);
+void HarborController::dockShip() {
+    world.getPlayer().getShip()->dock();
+
+    for (int i = 0; i < world.getHarborsSize(); i++) {
+        Harbor* h = &world.getHarbors()[i];
+        for (int o = 0; o < h->getGoodsForSaleSize(); o++) {
+            h->getGoodsForSale()[i].randomizeAmount();
+            h->getGoodsForSale()[i].randomizePrice();
+        }
+    }
+}
+
+void HarborController::repairShip() {
+    world.getPlayer().getShip()->repair(10);
+    world.getPlayer().payMoney(1);
 }
 
 void HarborController::setSail() {
-
+    Player& player = world.getPlayer();
+    Ship* ship = player.getShip();
     bool input_failed = false;
     do {
-        if (input_failed == true)
-            this->cliViewController.writeOutput(String("The given input was incorrect!"));
+        if (input_failed == true) {
+            cliViewController.writeOutput(String("The given input was incorrect!"));
+            input_failed = false;
+        }
 
-        std::ostringstream o;
-        o << "You are currently in: " << world.getPlayer().getShip()->getCurrentHarbor()->getName();
-        cliViewController.writeOutput(String(o.str().c_str()));
+        cliViewController.writeOutput(String("You are currently in: ") << world.getPlayer().getShip()->getCurrentHarbor()->getName());
 
-        this->cliViewController.writeOutput(String("These are your sailing options:"));
-        for(int i = 0; i < this->world.getHarborDistancesSize(); i++) {
-            if (this->world.getHarborDistances()[i].from == this->world.getPlayer().getShip()->getCurrentHarbor() ||
-                this->world.getHarborDistances()[i].to == this->world.getPlayer().getShip()->getCurrentHarbor()) {
-                std::ostringstream o;
-                o << i << ": " << this->world.getHarborDistances()[i].from->getName();
-                cliViewController.writeOutput(String(o.str().c_str()));
+        cliViewController.writeOutput(String("These are your sailing options:"));
+        for(int i = 0; i < world.getHarborDistancesSize(); i++) {
+            if (world.getHarborDistances()[i].from == world.getPlayer().getShip()->getCurrentHarbor())
+                cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i].to->getName());
+        }
+
+        try {
+            int input = std::stoi(cliViewController.getInput().c_str());
+            if(input >= 0 && input < world.getHarborDistancesSize() && world.getHarborDistances()[input].from == ship->getCurrentHarbor()) {
+                ship->setDestinationDistance(world.getHarborDistances()[input].distance);
+                ship->setDestination(world.getHarborDistances()[input].to);
+                ship->setCurrentHarbor(nullptr);
+                cliViewController.writeOutput(String("Destination set to: ") << world.getHarborDistances()[input].to->getName());
             }
         }
-
-        int input;
-        try {
-            input = std::stoi(this->cliViewController.getInput().c_str());
-            if(input > 0 && input < this->world.getHarborDistancesSize())
-                std::ostringstream o;
-                o << "Destination set to: " << this->world.getHarborDistances()[input].distance;
-                cliViewController.writeOutput(String(o.str().c_str()));
-        }
         catch(std::invalid_argument) {
-            input_failed = false;
+            input_failed = true;
         };
     } while(input_failed == true);
 }
 
-void HarborController::presentOptions() {
-    /*
+bool HarborController::presentOptions() {
+    Player* player = &world.getPlayer();
+    Ship* ship = player->getShip();
+    cliViewController.writeOutput(String() << "You are currently in: " << ship->getCurrentHarbor()->getName());
+
     bool input_failed = false;
     do {
-        if (input_failed == true)
-            this->cliViewController.writeOutput(String("The given input was incorrect!"));
+        if (input_failed == true) {
+            cliViewController.writeOutput(String("The given input was incorrect!"));
+            input_failed = false;
+        }
 
-        this->cliViewController.writeOutput(String("You are currently in a harbor, your options are:"));
-        this->cliViewController.writeOutput(String("buy_cannons, buy_goods, buy_ship, set_sail, repair, quit"));
-        String input = this->cliViewController.getInput();
+        cliViewController.writeOutput(String("You have: ") << player->getMoney() << " money");
+        cliViewController.writeOutput(String("Your ship has: ") << player->getShip()->getHealth() << " health");
+        cliViewController.writeOutput(String("Inventory:"));
+
+        for(int i = 0; i < ship->getCargoSize(); i++) {
+            auto g = ship->getCargo()[i];
+            cliViewController.writeOutput(g.getName() << ": " << g.getAmount() << "x");
+        }
+
+        cliViewController.writeOutput(String("Your options are:"));
+        cliViewController.writeOutput(String("buy_cannons, sell_cannons, buy_goods, sell_goods, buy_ship, sell_ship, set_sail, repair, quit"));
+        String input = cliViewController.getInput();
         if (input == String("buy_cannons")) {
-            buyCannons();
+            //buyCannons();
         } else if (input == String("buy_goods")) {
-            buyGoods();
+            //buyGoods();
         } else if (input == String("buy_ship")) {
-            buyShip();
+            //buyShip();
         } else if (input == String("set_sail")) {
             setSail();
         } else if (input == String("repair")) {
             repairShip();
         } else if (input == String("quit")) {
-            quitGame();
+            return true;
         } else {
             input_failed = true;
         }
     } while(input_failed == true);
-    */
+    return false;
 }

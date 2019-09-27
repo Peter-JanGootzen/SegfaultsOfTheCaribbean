@@ -2,13 +2,14 @@
 #include "models/ship.hpp"
 #include "std/string.hpp"
 
-Ship::Ship(String name, int price, int health, int cargoSpace,
+Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            int cannonCapacity, ShipWeight weight, ShipSize size) : 
-           name(name), price(price), health(health), 
+           name(name), price(price), maxHealth(maxHealth), 
            cargoSpace(cargoSpace), cannonCapacity(cannonCapacity),
            weight(weight), size(size) {
     this->cargo = nullptr;
     this->currentHarbor = nullptr;
+    this->health = maxHealth;
 };
 
 Ship::Ship() {
@@ -114,6 +115,12 @@ ShipSize Ship::getShipSize() const {
 void Ship::applyDamage(int damage) {
     this->health -= damage;
 };
+void Ship::repair(int amount) {
+    if (this->health + amount >= this->maxHealth)
+        this->health = maxHealth;
+    else
+        this->health += amount;
+};
 
 bool Ship::isSunken() const {
     return this->health <= 0;
@@ -134,5 +141,35 @@ void Ship::dock() {
 
 Harbor* const Ship::getCurrentHarbor() const {
     return this->currentHarbor;
+}
+
+Harbor* const Ship::getDestination() const {
+    return this->destination;
+}
+
+int Ship::getDestinationDistance() const {
+    return this->destinationDistance;
+}
+
+void Ship::setDestination(Harbor* destination) {
+    this->destination = destination;
+}
+void Ship::setCurrentHarbor(Harbor* harbor) {
+    this->currentHarbor = harbor;
+}
+
+void Ship::setDestinationDistance(int destinationDistance) {
+    this->destinationDistance = destinationDistance;
+}
+
+Good* const Ship::getCargo() const {
+    return this->cargo;
+}
+int Ship::getCargoSize() const {
+    return this->cargoSize;
+}
+
+int Ship::getHealth() const {
+    return this->health;
 }
 

@@ -8,7 +8,7 @@ String::String() {
     a = nullptr;
 };
 String::String(const char* buffer) {
-    n = 0;
+    n = 1;
     const char* temp = buffer;
     while(*buffer++)
         n++;
@@ -61,14 +61,44 @@ std::ostream& operator<<(std::ostream& os, const String& s)
     return os;
 }
 
+String operator<<(const String& s, int i) {
+    int l = 1;
+    int c = i;
+    while(c /= 10)
+        l++;
+    int* k = new int(i);
+    int sSize = 0;
+    if (s.a)
+        sSize = s.size() - 1;
+    char* buffer = new char[sSize + l + 1];
+    char* bff_ptr = buffer;
+    if(s.a) {
+        std::memcpy(buffer, s.a, s.size() - 1);
+        bff_ptr+=s.size() - 1;
+    }
+    sprintf(bff_ptr,"%d", i);
+    bff_ptr+=l;
+    *bff_ptr = '\0';
+    String input = String(buffer);
+    delete[] buffer;
+    delete k;
+    return input;
+}
+
 String operator<<(const String& r, const String& s)
 {
-    char* buffer = new char[s.size() + r.size() + 1];
+    int sSize = 0;
+    if (s.a)
+        sSize = s.size() -1;
+    int rSize = 0;
+    if (r.a)
+        rSize = r.size() -1;
+    char* buffer = new char[sSize + rSize + 1];
     char* bff_ptr = buffer;
-    std::memcpy(buffer, r.a, r.size());
-    bff_ptr+=r.size();
-    std::memcpy(bff_ptr, s.a, s.size());
-    bff_ptr+=s.size();
+    std::memcpy(buffer, r.a, rSize);
+    bff_ptr+=rSize;
+    std::memcpy(bff_ptr, s.a, sSize);
+    bff_ptr+=sSize;
     *bff_ptr = '\0';
     String string = String(buffer);
     delete[] buffer;
@@ -122,5 +152,6 @@ String& String::operator=(String&& other) {
     return *this;
 }
 String::~String() {
-    delete[] a;
+    if (a)
+        delete[] a;
 };

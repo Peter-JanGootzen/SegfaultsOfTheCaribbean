@@ -50,9 +50,19 @@ Harbor& Harbor::operator=(Harbor&& other) {
     }
     return *this;
 }
-//Harbor& Harbor::operator=(const Harbor& other) {
-//
-//}
+
+Good* const Harbor::getGoodsForSale() const {
+    return this->goodsForSale;
+}
+unsigned int Harbor::getGoodsForSaleSize() const {
+    return this->goodsForSaleSize;
+}
+Ship* const Harbor::getShipsForSale() const {
+    return this->shipsForSale;
+}
+unsigned int Harbor::getShipsForSaleSize() const {
+    return this->shipsForSaleSize;
+}
 
 Harbor::~Harbor() {
     delete[] shipsForSale;

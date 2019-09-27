@@ -8,8 +8,12 @@
 SeaController::SeaController(World& w, CliViewController& cliViewController) : world(w), cliViewController(cliViewController), battleController(BattleController(w, cliViewController)) {
 }
 
-void SeaController::sail(Ship* s) {
+bool SeaController::sail() {
+    auto s = world.getPlayer().getShip();
     //Sea changes
+    cliViewController.writeOutput(String("Destination is: ") << s->getDestination()->getName());
+    cliViewController.writeOutput(String("Destination distance is: ") << s->getDestinationDistance());
+    cliViewController.writeOutput(String("Your ship has ") << s->getHealth() << " health left.");
     cliViewController.writeOutput(String("You are at sea, press enter to continue."));
     cliViewController.getInput();
     int battle = Random::getInstance().getRandomInt(1, 100);
@@ -19,19 +23,23 @@ void SeaController::sail(Ship* s) {
             battleController.battle(s);
             break;
         case 21 ... 100:
-            move(s);
-            //if(s->getDestinationDistance() <= 0)
-            //    s->dock();
+            move();
+            if(s->getDestinationDistance() <= 0) {
+                return true;
+                s->dock();
+                cliViewController.writeOutput("You have arrived at your destination!");
+            }
             break;
         default:
             throw std::out_of_range("This shouldn't have happend...");
             break;
     }
+    return false;
 };
 
-void SeaController::move(Ship* s) {
-    
-    int seaRandom = Random::getInstance().getRandomInt(0, 20);
+void SeaController::move() {
+    auto s = world.getPlayer().getShip();
+    int seaRandom = Random::getInstance().getRandomInt(1, 20);
     switch (seaRandom)
     {
         case 1 ... 2:
@@ -43,16 +51,16 @@ void SeaController::move(Ship* s) {
             if(s->getShipWeight() == ShipWeight::Light) {
                 s->sail(1);
                 cliViewController.writeOutput(String("Slight wind but your ship is light so your ship moved one step closer to destination!"));
-            }
-            cliViewController.writeOutput(String("Slight wind which did not move your ship."));
+            } else
+                cliViewController.writeOutput(String("Slight wind which did not move your ship."));
             break;
         case 5 ... 7: 
             // If your ship is heavy, you cannot move.
             if(s->getShipWeight() != ShipWeight::Heavy) {
                 s->sail(1);
                 cliViewController.writeOutput(String("Light wind but your ship is heavy so it does not move."));
-            }
-            cliViewController.writeOutput(String("Light wind, your ship moves one step closer to destination."));
+            } else
+                cliViewController.writeOutput(String("Light wind, your ship moves one step closer to destination."));
             break;
         case 8 ... 17: 
             // Normal wind, move one step closer
@@ -93,9 +101,7 @@ void SeaController::move(Ship* s) {
             // Apply damage
             int damage = Random::getInstance().getRandomInt(1, 100);
             s->applyDamage(damage);
-            std::ostringstream o;
-            o << "Your ship got " << damage << " damage.";
-            cliViewController.writeOutput(String(o.str().c_str()));
+            cliViewController.writeOutput(String("Your ship got ") << damage << " damage.");
             break;
         }
         default:

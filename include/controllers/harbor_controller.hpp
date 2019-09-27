@@ -15,8 +15,7 @@ public:
     void repairShip();
     void dockShip();
     void setSail();
-    void quitGame();
-    void presentOptions();
+    bool presentOptions();
 private:
     World& world;
     CliViewController& cliViewController;
