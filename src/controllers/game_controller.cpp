@@ -17,9 +17,8 @@ GameController::GameController(World* w) :
 void GameController::start() {
     cliViewController->writeOutput("Welcome to Segfaults of the Caribbean!");
     cliViewController->writeOutput("Good luck in the dangerous waters of the Caribbean.");
-}
 
-void GameController::gameLoop() {
+    // Choosing a starting harbor
     bool input_failed = false;
     do {
         if (input_failed == true) {
@@ -48,7 +47,9 @@ void GameController::gameLoop() {
             input_failed = true;
         };
     } while(input_failed == true);
+}
 
+void GameController::gameLoop() {
     bool quit = false;
     while(((world->getPlayer().getMoney() < 1'000'000 && 
           (world->getPlayer().getShip() != nullptr &&  !world->getPlayer().getShip()->isSunken())) || 
