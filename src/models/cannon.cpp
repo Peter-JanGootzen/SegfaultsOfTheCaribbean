@@ -5,6 +5,6 @@ Cannon::Cannon(CannonType type) : type(type) {
 
 };
 
-Cannon::~Cannon() {
-
+CannonType Cannon::getCannonType() {
+    return type;
 };

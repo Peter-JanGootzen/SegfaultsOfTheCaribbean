@@ -7,7 +7,8 @@ class Cannon {
 
 public:
     Cannon(CannonType type);
-    ~Cannon();
+    CannonType getCannonType();
+    ~Cannon() = default;
 private:
     CannonType type;
 };

@@ -10,7 +10,11 @@ public:
     BattleController(World& w, CliViewController& cliViewController);
     void battle(Ship* s);
 private:
-    Ship spawnPirateShip();
+    Ship* spawnPirateShip();
+    String presentOptions(); 
+    void shoot(Ship* s, Ship* priateShip);
+    bool flee(Ship* s, Ship* pirateShip);
+    void surrender(Ship* s, Ship* pirateShip);
     World& world;
     CliViewController& cliViewController;
 };

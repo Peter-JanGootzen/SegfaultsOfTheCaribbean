@@ -30,6 +30,7 @@ public:
     int getCargoSpace() const;
     int getCannonCapacity() const;
     int getDestinationDistance() const;
+    Vector<Cannon*>& getCannons() const;
     ShipWeight getShipWeight() const;
     ShipSize getShipSize() const;
     Harbor* getCurrentHarbor() const;

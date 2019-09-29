@@ -17,7 +17,7 @@ void HarborController::dockShip() {
             h->getGoodsForSale()[i]->randomizePrice();
         }
     }
-}
+};
 
 void HarborController::buyShip() {
     Player& player = world.getPlayer();
@@ -80,7 +80,7 @@ void HarborController::repairShip() {
     {
         cliViewController.writeOutput(String("You do not have enough money!"));
     }
-}
+};
 
 void HarborController::setSail() {
     const Player& player = world.getPlayer();
@@ -113,7 +113,7 @@ void HarborController::setSail() {
             input_failed = true;
         };
     } while(input_failed == true);
-}
+};
 
 bool HarborController::presentOptions() {
     const Player* player = &world.getPlayer();
@@ -157,4 +157,4 @@ bool HarborController::presentOptions() {
         }
     } while(input_failed == true);
     return false;
-}
+};

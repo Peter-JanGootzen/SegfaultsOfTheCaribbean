@@ -82,6 +82,9 @@ ShipWeight Ship::getShipWeight() const {
 ShipSize Ship::getShipSize() const {
     return this->size;
 };
+Vector<Cannon*>& Ship::getCannons() const {
+    return *this->cannons;
+};
 void Ship::applyDamage(int damage) {
     this->health -= damage;
 };
@@ -90,6 +93,10 @@ void Ship::repair(int amount) {
         this->health = maxHealth;
     else
         this->health += amount;
+};
+
+void Ship::addCannon(Cannon* cannon) {
+    this->cannons->append(cannon);
 };
 
 bool Ship::isSunken() const {

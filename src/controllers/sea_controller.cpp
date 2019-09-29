@@ -25,6 +25,7 @@ bool SeaController::sail() {
         case 21 ... 100:
             move();
             if(s->getDestinationDistance() <= 0) {
+                cliViewController.writeOutput("You have arrived at your destination!");
                 return true;
             }
             break;
@@ -53,12 +54,13 @@ void SeaController::move() {
                 cliViewController.writeOutput(String("Slight wind which did not move your ship."));
             break;
         case 5 ... 7: 
-            // If your ship is heavy, you cannot move.
-            if(s->getShipWeight() != ShipWeight::Heavy) {
-                s->sail(1);
+            if(s->getShipWeight() == ShipWeight::Heavy) {
+                // If your ship is heavy, you cannot move.
                 cliViewController.writeOutput(String("Light wind but your ship is heavy so it does not move."));
-            } else
+            } else {
                 cliViewController.writeOutput(String("Light wind, your ship moves one step closer to destination."));
+                s->sail(1);
+            }
             break;
         case 8 ... 17: 
             // Normal wind, move one step closer
@@ -84,7 +86,7 @@ void SeaController::move() {
                 case 1 ... 40:
                     // Ship has gone off course.
                     s->sail(-1);
-                    cliViewController.writeOutput(String("Your ship has gone off course, distance to destination -1"));
+                    cliViewController.writeOutput(String("Your ship has gone off course!"));
                     break;
                 case 41 ... 80:
                     // Ship did not move.
