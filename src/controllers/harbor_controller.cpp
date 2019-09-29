@@ -7,17 +7,38 @@ HarborController::HarborController(World& w, CliViewController& cliViewControlle
 }
 
 void HarborController::dockShip() {
-    cliViewController.writeOutput("You have arrived at your destination!");
     world.getPlayer().getShip()->dock();
 
     for (int i = 0; i < world.getHarbors().getSize(); i++) {
-        const Harbor* h = world.getHarbors()[i];
+        Harbor* h = world.getHarbors()[i];
         for (int o = 0; o < h->getGoodsForSale().getSize(); o++) {
             h->getGoodsForSale()[i]->randomizeAmount();
             h->getGoodsForSale()[i]->randomizePrice();
+            h->randomizeCannonStock();
         }
     }
 };
+
+void HarborController::tradeCannons() {
+    Harbor* h = world.getPlayer().getShip()->getCurrentHarbor();
+    bool input_failed = false;
+    do {
+        if (input_failed == true) {
+            cliViewController.writeOutput(String("The given input was incorrect!"));
+            input_failed = false;
+        }
+        //cliViewController.writeOutput(String("Light cannons: ") << h->getLightCannonStock() << " in stock, for 50 gold each");
+        //cliViewController.writeOutput(String("Medium cannons: ") << h->getMediumCannonStock() << " in stock, for 200 gold each");
+        //cliViewController.writeOutput(String("Heavy cannons: ") << h->getHeavyCannonStock() << " in stock, for 1000 gold each");
+
+        try {
+            const int input = std::stoi(cliViewController.getInput().c_str());
+        }
+        catch(std::invalid_argument) {
+            input_failed = true;
+        };
+    } while(input_failed == true);
+}
 
 void HarborController::buyShip() {
     Player& player = world.getPlayer();
@@ -138,10 +159,10 @@ bool HarborController::presentOptions() {
         }
 
         cliViewController.writeOutput(String("Your options are:"));
-        cliViewController.writeOutput(String("buy_cannons, sell_cannons, buy_goods, sell_goods, buy_ship, sell_ship, set_sail, repair, quit"));
+        cliViewController.writeOutput(String("trade_cannons, sell_cannons, buy_goods, sell_goods, buy_ship, sell_ship, set_sail, repair, quit"));
         const String input = cliViewController.getInput();
-        if (input == String("buy_cannons")) {
-            //buyCannons();
+        if (input == String("trade_cannons")) {
+            tradeCannons();
         } else if (input == String("buy_goods")) {
             //buyGoods();
         } else if (input == String("buy_ship")) {

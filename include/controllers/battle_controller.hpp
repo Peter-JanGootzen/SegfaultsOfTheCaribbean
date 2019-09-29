@@ -15,6 +15,7 @@ private:
     void shoot(Ship* s, Ship* priateShip);
     bool flee(Ship* s, Ship* pirateShip);
     void surrender(Ship* s, Ship* pirateShip);
+    int calculateDamage(Ship* s);
     World& world;
     CliViewController& cliViewController;
 };

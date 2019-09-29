@@ -20,10 +20,20 @@ public:
     String getName() const;
     Vector<Good*>& getGoodsForSale() const;
     Vector<Ship*>& getShipsForSale() const;
+    int getLightCannonStock() const;
+    int getMediumCannonStock() const;
+    int getHeavyCannonStock() const;
+    void setLightCannonStock();
+    void setMediumCannonStock();
+    void setHeavyCannonStock();
+    void randomizeCannonStock();
 private:
     String name;
     Vector<Ship*>* shipsForSale; 
     Vector<Good*>* goodsForSale;
+    int lightCannonStock;
+    int mediumCannonStock;
+    int heavyCannonStock;
 };
 
 #endif

@@ -1,5 +1,6 @@
 #include "models/harbor.hpp"
 #include "models/ship.hpp"
+#include "std/random.hpp"
 
 Harbor::Harbor() {
     this->goodsForSale = new Vector<Good*>(true);
@@ -50,6 +51,12 @@ Vector<Good*>& Harbor::getGoodsForSale() const {
 }
 Vector<Ship*>& Harbor::getShipsForSale() const {
     return *this->shipsForSale;
+}
+
+void Harbor::randomizeCannonStock() {
+    this->lightCannonStock = Random::getInstance().getRandomInt(0, 5);
+    this->mediumCannonStock = Random::getInstance().getRandomInt(0, 3);
+    this->heavyCannonStock = Random::getInstance().getRandomInt(0, 2);
 }
 
 Harbor::~Harbor() {

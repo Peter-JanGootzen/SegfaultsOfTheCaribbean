@@ -10,7 +10,7 @@ class HarborController {
 public:
     HarborController(World& w, CliViewController& cliViewController);
     void buyGoods();
-    void buyCannons();
+    void tradeCannons();
     void buyShip();
     void repairShip();
     void dockShip();

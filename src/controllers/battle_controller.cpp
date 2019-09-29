@@ -11,55 +11,77 @@ void BattleController::battle(Ship* s) {
     cliViewController.writeOutput(String("You have encountered a pirate ship."));
     Ship* pirateShip = spawnPirateShip();
     bool fledOrSurrendered = false;
-    while (!s->isSunken() && !fledOrSurrendered) {
-        String input = presentOptions();
-        if (input == String("shoot")) {
-            shoot(s, pirateShip);
-        } else if (input == String("flee")) {
-            fledOrSurrendered = flee(s, pirateShip);
-            // if you flee, you will still be shot at
-            shoot(s, pirateShip);
-        } else if (input == String("surrender")) {
-            fledOrSurrendered = true;
-            surrender(s, pirateShip); 
-        }
+    bool input_failed = false;
+    while (!pirateShip->isSunken() && !fledOrSurrendered) {
+        do {
+            if (input_failed == true) {
+                cliViewController.writeOutput(String("The given input was incorrect!"));
+                input_failed = false;
+            }
+            int health = pirateShip->getHealth();
+            cliViewController.writeOutput(String("The pirate ship has ") << health << " health left");
+            cliViewController.writeOutput(String("These are your battling options:"));
+            cliViewController.writeOutput(String("shoot, flee or surrender"));
+            String input = cliViewController.getInput();
+            if (input == String("shoot")) {
+                shoot(s, pirateShip);
+            } else if (input == String("flee")) {
+                fledOrSurrendered = flee(s, pirateShip);
+                // if you flee, you will still be shot at
+            } else if (input == String("surrender")) {
+                fledOrSurrendered = true;
+                surrender(s, pirateShip); 
+            } else {
+                input_failed = true;
+            }
+        } while (input_failed);
     }
     delete pirateShip;
 };
 
-String BattleController::presentOptions()
-{
-    bool input_failed = false;
-    do { 
-        if (input_failed == true) {
-            cliViewController.writeOutput(String("The given input was incorrect!"));
-            input_failed = false;
-        }
-        cliViewController.writeOutput(String("These are your battling options:"));
-        cliViewController.writeOutput(String("shoot, flee or surrender"));
-        return cliViewController.getInput();
-    } while(input_failed);
-};
-
 void BattleController::shoot(Ship* ship, Ship* pirateShip) {
     Random& random = Random::getInstance();
-    for(int i = 0; i < pirateShip->getCannons().getSize(); i++) {
-        switch (pirateShip->getCannons().get(i)->getCannonType())
-        {
-        case CannonType::Light:
-            ship->applyDamage(random.getRandomInt(0,2));
-            break;
-        case CannonType::Medium: 
-            ship->applyDamage(random.getRandomInt(0,4));
-            break;
-        case CannonType::Heavy:
-            ship->applyDamage(random.getRandomInt(0,6));
-            break;
-        default:
-            break;
-        }
+    int damage = calculateDamage(ship);
+    pirateShip->applyDamage(damage);
+    cliViewController.writeOutput(String("Your ship did ") << damage << " damage");
+
+    if(!pirateShip->isSunken()) {
+        int pirateDamage;
+        cliViewController.writeOutput(String("The pirate ship is still alive and shoots back!"));
+        pirateDamage = calculateDamage(pirateShip);
+        ship->applyDamage(pirateDamage);
+        cliViewController.writeOutput(String("Your ship got ") << pirateDamage << " damage");
+    }
+
+    if(pirateShip->isSunken()) {
+        cliViewController.writeOutput(String("You defeated the pirate ship!"));
     }
 };
+
+int BattleController::calculateDamage(Ship* ship) {
+    Random& random = Random::getInstance();
+    int damage = 0;
+    if(ship->getCannons().getSize() == 0) {
+        cliViewController.writeOutput(String("This ") << ship->getName() << String("does not have any cannons!"));
+    }
+    for(int i = 0; i < ship->getCannons().getSize(); i++) {
+        switch (ship->getCannons().get(i)->getCannonType())
+        {
+            case CannonType::Light:
+                damage += random.getRandomInt(0,2);
+                break;
+            case CannonType::Medium: 
+                damage += random.getRandomInt(0,4);
+                break;
+            case CannonType::Heavy:
+                damage += random.getRandomInt(0,6);
+                break;
+            default:
+                break;
+        }
+    }
+    return damage;
+}
 
 bool BattleController::flee(Ship* s, Ship* pirateShip) {
     Random& random = Random::getInstance();
@@ -108,8 +130,15 @@ bool BattleController::flee(Ship* s, Ship* pirateShip) {
     }
 
     int chance = random.getRandomInt(1,100);
-    if(chance <= fleeChance)
+    if(chance <= fleeChance) {
+        cliViewController.writeOutput("You fled!");
         return true;
+    }
+    cliViewController.writeOutput("Fled attempt failed");
+    cliViewController.writeOutput("The pirate ship shoots at you!");
+    int damage = calculateDamage(pirateShip);
+    pirateShip->applyDamage(damage);
+    cliViewController.writeOutput(String("Your ship got ") << damage << " damage");
     return false;
 };
 
