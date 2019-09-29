@@ -8,8 +8,6 @@
 
 int main(int argc, char const *argv[])
 {
-    String input = String("Halooo") << 5123213 << String("test");
-    std::cout << input << std::endl;
     Ship* ship = new Ship(String("Pinnace"), 10000, 100, 200, 8, ShipWeight::Light, ShipSize::Small);
     Player* player = new Player();
     player->setShip(ship);

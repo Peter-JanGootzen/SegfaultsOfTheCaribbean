@@ -1,7 +1,6 @@
 #ifndef FILE_VECTOR_HPP
 #define FILE_VECTOR_HPP
 #include <stdexcept>
-#include <cstring>
 #include <algorithm>
 template<class T>
 class Vector {
@@ -21,6 +20,14 @@ public:
         }
         delete[] buffer;
     }
+    // copy constructor, should not kill the other value
+    Vector(const Vector& other) = delete;
+    // copy assignment operator, should not kill the other value
+    Vector& operator=(const Vector& other) = delete;
+    // move constructor, should kill the other value
+    Vector(Vector&& other) = delete;
+    // move assignment operator, should kill the other value
+    Vector& operator=(Vector&& other) = delete;
     T& operator[](size_t i) const {
         if (i > used) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
