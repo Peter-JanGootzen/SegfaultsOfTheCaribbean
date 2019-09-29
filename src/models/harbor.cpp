@@ -2,13 +2,11 @@
 #include "models/ship.hpp"
 
 Harbor::Harbor() {
-    this->goodsForSale = nullptr;
-    this->shipsForSale = nullptr;
+    this->goodsForSale = new Vector<Good*>(0, true);
+    this->shipsForSale = new Vector<Ship*>(0, true);
 };
-Harbor::Harbor(String name, Ship* shipsForSale, unsigned int shipsForSaleSize,
-    Good* goodsForSale, unsigned int goodsForSaleSize) :
-    name(name), shipsForSale(shipsForSale), shipsForSaleSize(shipsForSaleSize),
-    goodsForSale(goodsForSale), goodsForSaleSize(goodsForSaleSize) {
+Harbor::Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale) :
+    name(name), shipsForSale(shipsForSale), goodsForSale(goodsForSale) {
 
 };
 
@@ -18,8 +16,6 @@ String Harbor::getName() const {
 
 Harbor::Harbor(Harbor&& other) {
     // stack
-    this->goodsForSaleSize = other.goodsForSaleSize;
-    this->shipsForSaleSize = other.shipsForSaleSize;
     this->name = other.name;
 
     // heap
@@ -34,37 +30,31 @@ Harbor::Harbor(Harbor&& other) {
 Harbor& Harbor::operator=(Harbor&& other) {
     if (this != &other) {
         // stack
-        this->goodsForSaleSize = other.goodsForSaleSize;
-        this->shipsForSaleSize = other.shipsForSaleSize;
         this->name = other.name;
 
         // heap
         if (this->goodsForSale != nullptr)
-            delete[] this->goodsForSale;
+            delete this->goodsForSale;
         this->goodsForSale = other.goodsForSale;
         other.goodsForSale = nullptr;
         if (this->shipsForSale != nullptr)
-            delete[] this->shipsForSale;
+            delete this->shipsForSale;
         this->shipsForSale = other.shipsForSale;
         other.shipsForSale = nullptr;
     }
     return *this;
 }
 
-Good* const Harbor::getGoodsForSale() const {
-    return this->goodsForSale;
+Vector<Good*>& Harbor::getGoodsForSale() const {
+    return *this->goodsForSale;
 }
-unsigned int Harbor::getGoodsForSaleSize() const {
-    return this->goodsForSaleSize;
-}
-Ship* const Harbor::getShipsForSale() const {
-    return this->shipsForSale;
-}
-unsigned int Harbor::getShipsForSaleSize() const {
-    return this->shipsForSaleSize;
+Vector<Ship*>& Harbor::getShipsForSale() const {
+    return *this->shipsForSale;
 }
 
 Harbor::~Harbor() {
-    delete[] shipsForSale;
-    delete[] goodsForSale;
+    if (shipsForSale != nullptr)
+        delete shipsForSale;
+    if (goodsForSale != nullptr)
+        delete goodsForSale;
 }

@@ -11,9 +11,9 @@ void HarborController::dockShip() {
 
     for (int i = 0; i < world.getHarbors().getUsed(); i++) {
         Harbor* h = world.getHarbors()[i];
-        for (int o = 0; o < h->getGoodsForSaleSize(); o++) {
-            h->getGoodsForSale()[i].randomizeAmount();
-            h->getGoodsForSale()[i].randomizePrice();
+        for (int o = 0; o < h->getGoodsForSale().getUsed(); o++) {
+            h->getGoodsForSale()[i]->randomizeAmount();
+            h->getGoodsForSale()[i]->randomizePrice();
         }
     }
 }
@@ -72,9 +72,9 @@ bool HarborController::presentOptions() {
         cliViewController.writeOutput(String("Your ship has: ") << player->getShip()->getHealth() << " health");
         cliViewController.writeOutput(String("Inventory:"));
 
-        for(int i = 0; i < ship->getCargoSize(); i++) {
+        for(int i = 0; i < ship->getCargo().getUsed(); i++) {
             auto g = ship->getCargo()[i];
-            cliViewController.writeOutput(g.getName() << ": " << g.getAmount() << "x");
+            cliViewController.writeOutput(g->getName() << ": " << g->getAmount() << "x");
         }
 
         cliViewController.writeOutput(String("Your options are:"));

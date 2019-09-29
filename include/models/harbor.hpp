@@ -1,6 +1,7 @@
 #ifndef FILE_HARBOR_HPP
 #define FILE_HARBOR_HPP
 #include "std/string.hpp"
+#include "std/vector.hpp"
 #include "models/ship.hpp"
 #include "models/good.hpp"
 
@@ -14,19 +15,15 @@ public:
     Harbor(const Harbor& other) = delete;
     Harbor& operator=(Harbor&& other);
     Harbor& operator=(const Harbor& other) = delete;
-    Harbor(String name, Ship* shipsForSale, unsigned int shipsForSaleSize, Good* goodsForSale, unsigned int goodsForSaleSize);
-    String getName() const;
+    Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale);
 
-    Good* const getGoodsForSale() const;
-    unsigned int getGoodsForSaleSize() const;
-    Ship* const getShipsForSale() const;
-    unsigned int getShipsForSaleSize() const;
+    String getName() const;
+    Vector<Good*>& getGoodsForSale() const;
+    Vector<Ship*>& getShipsForSale() const;
 private:
     String name;
-    Ship* shipsForSale; 
-    unsigned int shipsForSaleSize;
-    Good* goodsForSale;
-    unsigned int goodsForSaleSize;
+    Vector<Ship*>* shipsForSale; 
+    Vector<Good*>* goodsForSale;
 };
 
 #endif

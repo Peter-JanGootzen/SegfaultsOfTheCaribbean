@@ -7,13 +7,13 @@ Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            name(name), price(price), maxHealth(maxHealth), 
            cargoSpace(cargoSpace), cannonCapacity(cannonCapacity),
            weight(weight), size(size) {
-    this->cargo = nullptr;
+    this->cargo = new Vector<Good*>(0, true);
     this->currentHarbor = nullptr;
     this->health = maxHealth;
 };
 
 Ship::Ship() {
-    this->cargo = nullptr;
+    this->cargo = new Vector<Good*>(0, true);
     this->currentHarbor = nullptr;
 };
 
@@ -27,7 +27,6 @@ Ship::Ship(Ship&& other) {
     this->destinationDistance = other.destinationDistance;
     this->weight = other.weight;
     this->size = other.size;
-    this->cargoSize = other.cargoSize;
 
     // heap
     this->destination = other.destination;
@@ -37,23 +36,7 @@ Ship::Ship(Ship&& other) {
     this->cargo = other.cargo;
     other.cargo = nullptr;
 };
-
-//Ship::Ship(const Ship& other) {
-//    this->name = other.name;
-//    this->price = other.price;
-//    this->cargoSpace = other.cargoSpace;
-//    this->cannonCapacity = other.cannonCapacity;
-//    this->health = other.health;
-//    this->destinationDistance = other.destinationDistance;
-//    this->weight = other.weight;
-//    this->size = other.size;
-//    this->cargo = new Good[other.cargoSize];
-//    this->cargoSize = other.cargoSize;
-//
-//    // heap
-//    std::memcpy(this->cargo, other.cargo, other.cargoSize);
-//};
-
+ 
 Ship& Ship::operator=(Ship&& other) {
     if(this != &other) {
         // stack
@@ -65,7 +48,6 @@ Ship& Ship::operator=(Ship&& other) {
         this->destinationDistance = other.destinationDistance;
         this->weight = other.weight;
         this->size = other.size;
-        this->cargoSize = other.cargoSize;
 
         // heap
         this->destination = other.destination;
@@ -73,37 +55,15 @@ Ship& Ship::operator=(Ship&& other) {
         this->currentHarbor = other.currentHarbor;
         other.currentHarbor = nullptr;
         if (this->cargo != nullptr)
-            delete[] this->cargo;
+            delete this->cargo;
         this->cargo = other.cargo;
         other.cargo = nullptr;
     }
     return *this;
 };
 
-//Ship& Ship::operator=(const Ship& other) {
-//    if(this != &other) {
-//        this->name = other.name;
-//        this->price = other.price;
-//        this->cargoSpace = other.cargoSpace;
-//        this->cannonCapacity = other.cannonCapacity;
-//        this->health = other.health;
-//        this->destinationDistance = other.destinationDistance;
-//        this->weight = other.weight;
-//        this->size = other.size;
-//        this->cargoSize = other.cargoSize;
-//
-//        // heap
-//        //if (this->cargo != nullptr)
-//            delete[] this->cargo;
-//        this->cargo = new Good[other.cargoSize];
-//        std::memcpy(this->cargo, other.cargo, other.cargoSize);
-//    }
-//    return *this;
-//}
-
 Ship::~Ship() {
-    if (this->cargo != nullptr)
-        delete[] this->cargo;
+    delete this->cargo;
 };
 
 ShipWeight Ship::getShipWeight() const {
@@ -162,11 +122,8 @@ void Ship::setDestinationDistance(int destinationDistance) {
     this->destinationDistance = destinationDistance;
 }
 
-Good* const Ship::getCargo() const {
-    return this->cargo;
-}
-int Ship::getCargoSize() const {
-    return this->cargoSize;
+Vector<Good*>& Ship::getCargo() const {
+    return *this->cargo;
 }
 
 int Ship::getHealth() const {

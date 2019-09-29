@@ -6,6 +6,7 @@
 #include "models/harbor.hpp"
 #include "models/cannon.hpp"
 #include "std/string.hpp"
+#include "std/vector.hpp"
 
 class Harbor;
 
@@ -32,8 +33,7 @@ public:
     ShipSize getShipSize() const;
     Harbor* const getCurrentHarbor() const;
     Harbor* const getDestination() const;
-    Good* const getCargo() const;
-    int getCargoSize() const;
+    Vector<Good*>& getCargo() const;
     bool isSunken() const;
     bool isDocked() const;
     // Setters
@@ -65,8 +65,7 @@ private:
     Harbor* destination;
     ShipWeight weight;
     ShipSize size;
-    Good* cargo;
-    unsigned int cargoSize;
+    Vector<Good*>* cargo;
     // Not the owner!
     Harbor* currentHarbor;
 };
