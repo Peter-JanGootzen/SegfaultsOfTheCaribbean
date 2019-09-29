@@ -26,8 +26,6 @@ bool SeaController::sail() {
             move();
             if(s->getDestinationDistance() <= 0) {
                 return true;
-                s->dock();
-                cliViewController.writeOutput("You have arrived at your destination!");
             }
             break;
         default:

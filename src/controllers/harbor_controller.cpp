@@ -7,15 +7,69 @@ HarborController::HarborController(World& w, CliViewController& cliViewControlle
 }
 
 void HarborController::dockShip() {
+    cliViewController.writeOutput("You have arrived at your destination!");
     world.getPlayer().getShip()->dock();
 
-    for (int i = 0; i < world.getHarbors().getUsed(); i++) {
+    for (int i = 0; i < world.getHarbors().getSize(); i++) {
         const Harbor* h = world.getHarbors()[i];
-        for (int o = 0; o < h->getGoodsForSale().getUsed(); o++) {
+        for (int o = 0; o < h->getGoodsForSale().getSize(); o++) {
             h->getGoodsForSale()[i]->randomizeAmount();
             h->getGoodsForSale()[i]->randomizePrice();
         }
     }
+}
+
+void HarborController::buyShip() {
+    Player& player = world.getPlayer();
+    Ship* ship = player.getShip();
+    Harbor* harbor = ship->getCurrentHarbor();
+
+    cliViewController.writeOutput(String("These ships are for sale:"));
+    for(int i = 0; i < world.getHarborDistances().getSize(); i++) {
+        cliViewController.writeOutput(String() << i << ": " << harbor->getShipsForSale().get(i)->getName());
+    }
+
+    bool input_failed = false;
+    do {
+        if (input_failed == true) {
+            cliViewController.writeOutput(String("The given input was incorrect!"));
+            input_failed = false;
+        }
+
+        try {
+            const int input = std::stoi(cliViewController.getInput().c_str());
+            if(input >= 0 && input < harbor->getShipsForSale().getSize()) {
+                auto shipToBuy = harbor->getShipsForSale().get(input);
+                if (player.getMoney() - shipToBuy->getPrice() + (player.getShip()->getPrice() / 2) < 0) {
+                    cliViewController.writeOutput(String("You do not have enough money to buy this ship"));
+                    return;
+                }
+                if (ship->getCargoAmount() > shipToBuy->getCargoSpace()) {
+                    cliViewController.writeOutput(String("You cannot buy this ship, because you currently have more cargo than this ship can hold."));
+                    return;
+                }
+
+                auto boughtShip = harbor->getShipsForSale().remove_index(input);
+                Ship* oldShip = player.setShip(boughtShip);
+                oldShip->setDestination(nullptr);
+                oldShip->setCurrentHarbor(nullptr);
+                oldShip->setHealth(oldShip->getMaxHealth());
+                for (int i = 0; i < oldShip->getCargo().getSize(); i++) {
+                    boughtShip->getCargo().append(oldShip->getCargo().remove_index(i));
+                }
+                player.payMoney(boughtShip->getPrice());
+                player.receiveMoney(oldShip->getPrice() / 2);
+                boughtShip->setCurrentHarbor(harbor);
+                harbor->getShipsForSale().append(oldShip);
+                cliViewController.writeOutput(String("You bought: ") << boughtShip->getName());
+            } else {
+                input_failed = true;
+            }
+        }
+        catch(std::invalid_argument) {
+            input_failed = true;
+        };
+    } while(input_failed == true);
 }
 
 void HarborController::repairShip() {
@@ -41,14 +95,14 @@ void HarborController::setSail() {
         cliViewController.writeOutput(String("You are currently in: ") << world.getPlayer().getShip()->getCurrentHarbor()->getName());
 
         cliViewController.writeOutput(String("These are your sailing options:"));
-        for(int i = 0; i < world.getHarborDistances().getUsed(); i++) {
+        for(int i = 0; i < world.getHarborDistances().getSize(); i++) {
             if (world.getHarborDistances()[i]->from == world.getPlayer().getShip()->getCurrentHarbor())
                 cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i]->to->getName());
         }
 
         try {
             const int input = std::stoi(cliViewController.getInput().c_str());
-            if(input >= 0 && input < world.getHarborDistances().getUsed() && world.getHarborDistances()[input]->from == ship->getCurrentHarbor()) {
+            if(input >= 0 && input < world.getHarborDistances().getSize() && world.getHarborDistances()[input]->from == ship->getCurrentHarbor()) {
                 ship->setDestinationDistance(world.getHarborDistances()[input]->distance);
                 ship->setDestination(world.getHarborDistances()[input]->to);
                 ship->setCurrentHarbor(nullptr);
@@ -74,10 +128,11 @@ bool HarborController::presentOptions() {
         }
 
         cliViewController.writeOutput(String("You have: ") << player->getMoney() << " money");
+        cliViewController.writeOutput(String("Your currently own: ") << player->getShip()->getName() << " as your ship");
         cliViewController.writeOutput(String("Your ship has: ") << player->getShip()->getHealth() << " health");
         cliViewController.writeOutput(String("Inventory:"));
 
-        for(int i = 0; i < ship->getCargo().getUsed(); i++) {
+        for(int i = 0; i < ship->getCargo().getSize(); i++) {
             const auto g = ship->getCargo()[i];
             cliViewController.writeOutput(g->getName() << ": " << g->getAmount() << "x");
         }
@@ -90,7 +145,7 @@ bool HarborController::presentOptions() {
         } else if (input == String("buy_goods")) {
             //buyGoods();
         } else if (input == String("buy_ship")) {
-            //buyShip();
+            buyShip();
         } else if (input == String("set_sail")) {
             setSail();
         } else if (input == String("repair")) {

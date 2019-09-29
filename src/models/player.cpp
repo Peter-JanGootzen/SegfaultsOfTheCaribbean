@@ -8,15 +8,15 @@ Ship* Player::getShip() const {
     return this->ship;
 }
 
-Ship& Player::setShip(Ship* other) {
-    Ship& oldShip = *this->ship;
+Ship* Player::setShip(Ship* other) {
+    Ship* oldShip = this->ship;
     this->ship = other;
     return oldShip; 
 }
 
 Player::Player() {
     this->ship = nullptr;
-    this->money = 5000;
+    this->money = 900'000;
 }
 
 Player::~Player() {
@@ -42,5 +42,9 @@ Player& Player::operator=(Player&& other) {
 }
 
 void Player::payMoney(int amount) {
+    this->money -= amount;
+}
+
+void Player::receiveMoney(int amount) {
     this->money -= amount;
 }

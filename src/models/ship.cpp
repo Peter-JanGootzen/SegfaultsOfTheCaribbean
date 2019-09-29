@@ -7,14 +7,14 @@ Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            name(name), price(price), maxHealth(maxHealth), 
            cargoSpace(cargoSpace), cannonCapacity(cannonCapacity),
            weight(weight), size(size) {
-    this->cargo = new Vector<Good*>(0, true);
-    this->cannons = new Vector<Cannon*>(0, true);
+    this->cargo = new Vector<Good*>(true);
+    this->cannons = new Vector<Cannon*>(true);
     this->currentHarbor = nullptr;
     this->health = maxHealth;
 };
 
 Ship::Ship() {
-    this->cargo = new Vector<Good*>(0, true);
+    this->cargo = new Vector<Good*>(true);
     this->currentHarbor = nullptr;
 };
 
@@ -109,12 +109,20 @@ void Ship::dock() {
     this->currentHarbor = this->destination;
 }
 
-Harbor* const Ship::getCurrentHarbor() const {
+String Ship::getName() const {
+    return this->name;
+}
+
+Harbor* Ship::getCurrentHarbor() const {
     return this->currentHarbor;
 }
 
-Harbor* const Ship::getDestination() const {
+Harbor* Ship::getDestination() const {
     return this->destination;
+}
+
+Vector<Good*>& Ship::getCargo() const {
+    return *this->cargo;
 }
 
 int Ship::getDestinationDistance() const {
@@ -132,11 +140,33 @@ void Ship::setDestinationDistance(int destinationDistance) {
     this->destinationDistance = destinationDistance;
 }
 
-Vector<Good*>& Ship::getCargo() const {
-    return *this->cargo;
+void Ship::setHealth(int health) {
+    if (this->health + health > this->maxHealth)
+        this->health = maxHealth;
+    this->health += health;
+}
+
+int Ship::getCargoAmount() const {
+    int total = 0;
+    for (int i = 0; i < cargo->getSize(); i++) {
+        total += cargo->get(i)->getAmount();
+    }
+    return total;
 }
 
 int Ship::getHealth() const {
     return this->health;
+}
+
+int Ship::getMaxHealth() const {
+    return this->maxHealth;
+}
+
+int Ship::getCargoSpace() const {
+    return this->cargoSpace;
+}
+
+int Ship::getPrice() const {
+    return this->price;
 }
 

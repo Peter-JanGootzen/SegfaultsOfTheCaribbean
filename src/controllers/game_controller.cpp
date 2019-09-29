@@ -28,16 +28,15 @@ void GameController::start() {
 
         cliViewController->writeOutput(String("In which harbor would you like to start?"));
 
-        for(int i = 0; i < world->getHarbors().getUsed(); i++) {
+        for(int i = 0; i < world->getHarbors().getSize(); i++) {
             cliViewController->writeOutput(String() << i << String(": ") << world->getHarbors()[i]->getName());
         }
         try {
             const String input_string = cliViewController->getInput();
             const int input = std::atoi(input_string.c_str());
-            if(input >= 0 && input < world->getHarbors().getUsed()) {
+            if(input >= 0 && input < world->getHarbors().getSize()) {
                 world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
-                cliViewController->writeOutput(String("Current harbor set to: ") << world->getHarbors()[input]->getName());
             } else
             {
                 input_failed = true;
@@ -51,11 +50,10 @@ void GameController::start() {
 
 void GameController::gameLoop() {
     bool quit = false;
-    while(((world->getPlayer().getMoney() < 1'000'000 && 
-          (world->getPlayer().getShip() != nullptr &&  !world->getPlayer().getShip()->isSunken())) || 
+    while(((world->getPlayer().getMoney() < 1'000'000 &&
+          (world->getPlayer().getShip() != nullptr &&  !world->getPlayer().getShip()->isSunken())) ||
           world->getPlayer().getShip() == nullptr) &&
           !quit) {
-        cliViewController->writeOutput(String("---------------------------------------------------------------------------------------"));
         if (world->getPlayer().getShip() != nullptr && world->getPlayer().getShip()->isDocked())
         { // You are docked
             quit = this->harborController->presentOptions();

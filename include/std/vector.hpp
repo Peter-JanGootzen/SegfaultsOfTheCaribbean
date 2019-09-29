@@ -5,16 +5,17 @@
 template<class T>
 class Vector {
 public:
-    Vector(T* buffer, size_t n, bool valuesAreOwned) : used(n), capacity(n), valuesAreOwned(valuesAreOwned) {
+    Vector(T* buffer, size_t n, bool valuesAreOwned) : size(n), valuesAreOwned(valuesAreOwned) {
         this->buffer = new T[n];
         std::copy_n(buffer, n, this->buffer);
     };
-    Vector(size_t n, bool valuesAreOwned) : used(0), capacity(n), valuesAreOwned(valuesAreOwned) {
-        buffer = new T[n];
+    Vector(bool valuesAreOwned) : valuesAreOwned(valuesAreOwned) {
+        size = 0;
+        buffer = nullptr;
     };
     ~Vector() {
         if (valuesAreOwned) {
-            for (int i = 0; i < used; i++) {
+            for (int i = 0; i < size; i++) {
                 delete (buffer[i]);
             }
         }
@@ -29,54 +30,49 @@ public:
     // move assignment operator, should kill the other value
     Vector& operator=(Vector&& other) = delete;
     T& operator[](size_t i) const {
-        if (i > used) throw std::out_of_range("Please supply a valid range");
+        if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
     T& get(size_t i) const {
-        if (i > used) throw std::out_of_range("Please supply a valid range");
+        if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
     void append(T v) {
-        if (capacity == used) {
-            size_t newCapacity = capacity + 1;
-            auto newBuffer = new T[newCapacity];
-            std::copy_n(buffer, used, newBuffer);
+        auto newBuffer = new T[size + 1];
+        if (buffer) {
+            std::copy_n(buffer, size, newBuffer);
             delete[] buffer;
-            buffer = newBuffer;
-            capacity = newCapacity;
-            used++;
         }
-        else {
-            buffer[used] = std::move(v);
-            used++;
-        }
+        buffer = newBuffer;
+        buffer[size] = v;
+        size++;
     }
     // By index
     T remove_index(size_t index) {
-        if (index > used) throw std::out_of_range("Please supply a valid range");
+        if (index > size || !buffer) throw std::out_of_range("Please supply a valid range");
         T e = buffer[index];
-        std::copy_n(buffer + index + 1, used - index - 1, buffer + index);
-        used--;
+
+        auto newBuffer = new T[size];
+        std::copy_n(buffer, index, newBuffer);
+        std::copy_n(buffer + index, size - index - 1, newBuffer + index);
+        size--;
         return e;
     }
     // Searches
     void remove(T v) {
-        for (size_t i = 0; i < used; i++) {
-            if (buffer[i] == v)
+        for (size_t i = 0; i < size; i++) {
+            if (buffer[i] == v) {
                 remove_index(i); break;
+            }
         }
     }
-    size_t getCapacity() const {
-        return capacity;
-    }
-    size_t getUsed() const {
-        return capacity;
+    size_t getSize() const {
+        return size;
     }
     // todo rule of five
 private:
     T* buffer;
-    size_t capacity;
-    size_t used;
+    size_t size;
     bool valuesAreOwned;
 };
 #endif

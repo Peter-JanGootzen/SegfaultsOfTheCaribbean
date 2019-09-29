@@ -25,26 +25,25 @@ public:
     // Getters
     String getName() const;
     int getHealth() const;
+    int getMaxHealth() const;
     int getPrice() const;
     int getCargoSpace() const;
     int getCannonCapacity() const;
     int getDestinationDistance() const;
     ShipWeight getShipWeight() const;
     ShipSize getShipSize() const;
-    Harbor* const getCurrentHarbor() const;
-    Harbor* const getDestination() const;
+    Harbor* getCurrentHarbor() const;
+    Harbor* getDestination() const;
     Vector<Good*>& getCargo() const;
+    int getCargoAmount() const;
     bool isSunken() const;
     bool isDocked() const;
     // Setters
     void setName(String name);
     void setHealth(int health);
-    void setPrice(int price);
-    void setCargoSpace(int cargoSpace);
-    void setCannonCapacity(int cannonCapacity);
     void setDestinationDistance(int destinationDistance);
-    void setCurrentHarbor(Harbor* harbor);
-    void setDestination(Harbor* destination);
+    void setCurrentHarbor(Harbor* const harbor);
+    void setDestination(Harbor* const destination);
     void setShipWeight(ShipWeight weight);
     void setShipSize(ShipSize size);
     // Other

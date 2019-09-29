@@ -2,8 +2,8 @@
 #include "models/ship.hpp"
 
 Harbor::Harbor() {
-    this->goodsForSale = new Vector<Good*>(0, true);
-    this->shipsForSale = new Vector<Ship*>(0, true);
+    this->goodsForSale = new Vector<Good*>(true);
+    this->shipsForSale = new Vector<Ship*>(true);
 };
 Harbor::Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale) :
     name(name), shipsForSale(shipsForSale), goodsForSale(goodsForSale) {
