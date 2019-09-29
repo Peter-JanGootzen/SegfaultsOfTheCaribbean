@@ -66,6 +66,7 @@ private:
     ShipWeight weight;
     ShipSize size;
     Vector<Good*>* cargo;
+    Vector<Cannon*>* cannons;
     // Not the owner!
     Harbor* currentHarbor;
 };

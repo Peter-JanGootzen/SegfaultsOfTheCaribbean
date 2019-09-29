@@ -33,8 +33,8 @@ void GameController::gameLoop() {
             cliViewController->writeOutput(String() << i << String(": ") << world->getHarbors()[i]->getName());
         }
         try {
-            String input_string = cliViewController->getInput();
-            int input = std::atoi(input_string.c_str());
+            const String input_string = cliViewController->getInput();
+            const int input = std::atoi(input_string.c_str());
             if(input >= 0 && input < world->getHarbors().getUsed()) {
                 world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
@@ -59,7 +59,7 @@ void GameController::gameLoop() {
         { // You are docked
             quit = this->harborController->presentOptions();
         } else { // you are at sea
-            bool arrived = this->seaController->sail();
+            const bool arrived = this->seaController->sail();
             if (arrived)
                 harborController->dockShip();
         }

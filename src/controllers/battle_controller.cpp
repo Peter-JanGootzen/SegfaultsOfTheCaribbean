@@ -9,16 +9,15 @@ BattleController::BattleController(World& w, CliViewController& cliViewControlle
 void BattleController::battle(Ship* s) {
     cliViewController.writeOutput(String("You have encountered a pirate ship."));
     Ship pirateShip = spawnPirateShip();
-
 };
 
 Ship BattleController::spawnPirateShip() {
     Random& random = Random::getInstance();
-    int health = random.getRandomInt(1, 300);
-    int cannons = random.getRandomInt(0, 25);
-    int cargoSpace = random.getRandomInt(25, 200);
-    int shipWeight = random.getRandomInt(0, 2);
-    int shipSize = random.getRandomInt(0,1);
+    const int health = random.getRandomInt(1, 300);
+    const int cannons = random.getRandomInt(0, 25);
+    const int cargoSpace = random.getRandomInt(25, 200);
+    const int shipWeight = random.getRandomInt(0, 2);
+    const int shipSize = random.getRandomInt(0,1);
 
     Ship ship(String("PirateShip"), 0, health, 250, 25, ShipWeight(shipWeight), ShipSize(shipSize));
 

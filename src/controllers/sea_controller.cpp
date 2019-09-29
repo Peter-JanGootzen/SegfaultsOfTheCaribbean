@@ -9,14 +9,14 @@ SeaController::SeaController(World& w, CliViewController& cliViewController) : w
 }
 
 bool SeaController::sail() {
-    auto s = world.getPlayer().getShip();
+    const auto s = world.getPlayer().getShip();
     //Sea changes
     cliViewController.writeOutput(String("Destination is: ") << s->getDestination()->getName());
     cliViewController.writeOutput(String("Destination distance is: ") << s->getDestinationDistance());
     cliViewController.writeOutput(String("Your ship has ") << s->getHealth() << " health left.");
     cliViewController.writeOutput(String("You are at sea, press enter to continue."));
     cliViewController.getInput();
-    int battle = Random::getInstance().getRandomInt(1, 100);
+    const int battle = Random::getInstance().getRandomInt(1, 100);
     switch (battle)
     {
         case 1 ... 20:
@@ -39,7 +39,7 @@ bool SeaController::sail() {
 
 void SeaController::move() {
     auto s = world.getPlayer().getShip();
-    int seaRandom = Random::getInstance().getRandomInt(1, 20);
+    const int seaRandom = Random::getInstance().getRandomInt(1, 20);
     switch (seaRandom)
     {
         case 1 ... 2:
@@ -80,7 +80,7 @@ void SeaController::move() {
             // 40% Chance that the ship did not move.
             // 20% Chance that the ship moved in the right direction.
             // Because ship was stuck in the storm it is also damaged 1-100%.
-            int storm = Random::getInstance().getRandomInt(1,100);
+            const int storm = Random::getInstance().getRandomInt(1,100);
             switch (storm)
             {
                 case 1 ... 40:
@@ -99,7 +99,7 @@ void SeaController::move() {
             }
 
             // Apply damage
-            int damage = Random::getInstance().getRandomInt(1, 100);
+            const int damage = Random::getInstance().getRandomInt(1, 100);
             s->applyDamage(damage);
             cliViewController.writeOutput(String("Your ship got ") << damage << " damage.");
             break;

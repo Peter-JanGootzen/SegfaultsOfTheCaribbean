@@ -12,7 +12,7 @@ public:
     Player& operator=(const Player& other) = delete;
     ~Player();
     // This returns the old ship so it can be sold.
-    Ship* setShip(Ship* ship);
+    Ship& setShip(Ship* ship);
     // This returns a ptr because there can be no ship, so it should be able to return nullptr
     Ship* getShip() const;
     int getMoney() const;

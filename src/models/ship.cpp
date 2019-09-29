@@ -8,6 +8,7 @@ Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            cargoSpace(cargoSpace), cannonCapacity(cannonCapacity),
            weight(weight), size(size) {
     this->cargo = new Vector<Good*>(0, true);
+    this->cannons = new Vector<Cannon*>(0, true);
     this->currentHarbor = nullptr;
     this->health = maxHealth;
 };
@@ -35,6 +36,8 @@ Ship::Ship(Ship&& other) {
     other.currentHarbor = nullptr;
     this->cargo = other.cargo;
     other.cargo = nullptr;
+    this->cannons = other.cannons;
+    other.cannons = nullptr;
 };
  
 Ship& Ship::operator=(Ship&& other) {
@@ -58,12 +61,19 @@ Ship& Ship::operator=(Ship&& other) {
             delete this->cargo;
         this->cargo = other.cargo;
         other.cargo = nullptr;
+        if (this->cannons != nullptr)
+            delete this->cannons;
+        this->cannons = other.cannons;
+        other.cannons = nullptr;
     }
     return *this;
 };
 
 Ship::~Ship() {
-    delete this->cargo;
+    if (this->cargo != nullptr)
+        delete this->cargo;
+    if (this->cannons != nullptr)
+        delete this->cannons;
 };
 
 ShipWeight Ship::getShipWeight() const {

@@ -8,8 +8,8 @@ Ship* Player::getShip() const {
     return this->ship;
 }
 
-Ship* Player::setShip(Ship* other) {
-    Ship* oldShip = this->ship;
+Ship& Player::setShip(Ship* other) {
+    Ship& oldShip = *this->ship;
     this->ship = other;
     return oldShip; 
 }
