@@ -5,45 +5,59 @@
 template<class T>
 class Vector {
 public:
-    Vector(T* buffer, unsigned int n) : used(n), buffer(buffer) {};
+    Vector(T* buffer, size_t n) : used(n), capacity(n) {
+        this->buffer = new T[n];
+        std::copy_n(buffer, n, this->buffer);
+    };
+    Vector(size_t n) : used(0), capacity(n) {
+        buffer = new T[n];
+    };
     ~Vector() {
-        if (valuesAreOwned)
-        {
-            delete[] buffer;
-        }
+        delete[] buffer;
     }
-    T& operator[](unsigned int i) const {
+    T& operator[](size_t i) const {
         if (i > used) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
-    void append(T* v) {
+    T& get(size_t i) const {
+        if (i > used) throw std::out_of_range("Please supply a valid range");
+        return buffer[i];
+    }
+    void append(T v) {
         if (capacity == used) {
-            // allocate new array and copy everything over
+            size_t newCapacity = capacity + 1;
+            auto newBuffer = new T[newCapacity];
+            std::copy_n(buffer, used, newBuffer);
+            delete[] buffer;
+            buffer = newBuffer;
+            capacity = newCapacity;
+            used++;
         }
         else {
-            // Just append it
+            buffer[used] = v;
+            used++;
         }
     }
     // By index
-    void remove(unsigned int index) {
-        std::memcpy(buffer + index, buffer + index + 1, used - index - 1);
+    T remove_index(size_t index) {
+        if (index > used) throw std::out_of_range("Please supply a valid range");
+        T e = buffer[index];
+        std::copy_n(buffer + index + 1, used - index - 1, buffer + index);
         used--;
+        return e;
     }
     // Searches
-    void remove(T* v) {
-        for (int i = 0; i < used; i++) {
+    void remove(T v) {
+        for (size_t i = 0; i < used; i++) {
             if (buffer[i] == v)
-                return remove(i);
+                remove_index(i); break;
         }
-    }
-    void delet() {
-        delete[] buffer;
     }
     // todo rule of five
 private:
     T* buffer;
-    unsigned int capacity;
-    unsigned int used;
+    size_t capacity;
+    size_t used;
     bool valuesAreOwned;
 };
 #endif

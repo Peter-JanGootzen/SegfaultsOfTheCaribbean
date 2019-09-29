@@ -36,7 +36,8 @@ void GameController::gameLoop() {
             String input_string = cliViewController->getInput();
             int input = std::atoi(input_string.c_str());
             if(input >= 0 && input < world->getHarborsSize()) {
-                world->getPlayer().getShip()->setCurrentHarbor(&world->getHarbors()[input]);
+                world->getPlayer().getShip()->setDestination(&world->getHarbors()[input]);
+                harborController->dockShip();
                 cliViewController->writeOutput(String("Current harbor set to: ") << world->getHarbors()[input].getName());
             } else
             {
