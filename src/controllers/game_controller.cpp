@@ -29,16 +29,16 @@ void GameController::gameLoop() {
 
         cliViewController->writeOutput(String("In which harbor would you like to start?"));
 
-        for(int i = 0; i < world->getHarborsSize(); i++) {
-            cliViewController->writeOutput(String() << i << String(": ") << world->getHarbors()[i].getName());
+        for(int i = 0; i < world->getHarbors().getUsed(); i++) {
+            cliViewController->writeOutput(String() << i << String(": ") << world->getHarbors()[i]->getName());
         }
         try {
             String input_string = cliViewController->getInput();
             int input = std::atoi(input_string.c_str());
-            if(input >= 0 && input < world->getHarborsSize()) {
-                world->getPlayer().getShip()->setDestination(&world->getHarbors()[input]);
+            if(input >= 0 && input < world->getHarbors().getUsed()) {
+                world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
-                cliViewController->writeOutput(String("Current harbor set to: ") << world->getHarbors()[input].getName());
+                cliViewController->writeOutput(String("Current harbor set to: ") << world->getHarbors()[input]->getName());
             } else
             {
                 input_failed = true;

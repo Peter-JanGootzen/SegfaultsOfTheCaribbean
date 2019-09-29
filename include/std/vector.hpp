@@ -2,17 +2,23 @@
 #define FILE_VECTOR_HPP
 #include <stdexcept>
 #include <cstring>
+#include <algorithm>
 template<class T>
 class Vector {
 public:
-    Vector(T* buffer, size_t n) : used(n), capacity(n) {
+    Vector(T* buffer, size_t n, bool valuesAreOwned) : used(n), capacity(n), valuesAreOwned(valuesAreOwned) {
         this->buffer = new T[n];
         std::copy_n(buffer, n, this->buffer);
     };
-    Vector(size_t n) : used(0), capacity(n) {
+    Vector(size_t n, bool valuesAreOwned) : used(0), capacity(n), valuesAreOwned(valuesAreOwned) {
         buffer = new T[n];
     };
     ~Vector() {
+        if (valuesAreOwned) {
+            for (int i = 0; i < used; i++) {
+                delete (buffer[i]);
+            }
+        }
         delete[] buffer;
     }
     T& operator[](size_t i) const {
@@ -34,7 +40,7 @@ public:
             used++;
         }
         else {
-            buffer[used] = v;
+            buffer[used] = std::move(v);
             used++;
         }
     }
@@ -52,6 +58,12 @@ public:
             if (buffer[i] == v)
                 remove_index(i); break;
         }
+    }
+    size_t getCapacity() const {
+        return capacity;
+    }
+    size_t getUsed() const {
+        return capacity;
     }
     // todo rule of five
 private:

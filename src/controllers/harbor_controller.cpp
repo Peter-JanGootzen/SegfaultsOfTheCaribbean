@@ -9,8 +9,8 @@ HarborController::HarborController(World& w, CliViewController& cliViewControlle
 void HarborController::dockShip() {
     world.getPlayer().getShip()->dock();
 
-    for (int i = 0; i < world.getHarborsSize(); i++) {
-        Harbor* h = &world.getHarbors()[i];
+    for (int i = 0; i < world.getHarbors().getUsed(); i++) {
+        Harbor* h = world.getHarbors()[i];
         for (int o = 0; o < h->getGoodsForSaleSize(); o++) {
             h->getGoodsForSale()[i].randomizeAmount();
             h->getGoodsForSale()[i].randomizePrice();
@@ -36,18 +36,18 @@ void HarborController::setSail() {
         cliViewController.writeOutput(String("You are currently in: ") << world.getPlayer().getShip()->getCurrentHarbor()->getName());
 
         cliViewController.writeOutput(String("These are your sailing options:"));
-        for(int i = 0; i < world.getHarborDistancesSize(); i++) {
-            if (world.getHarborDistances()[i].from == world.getPlayer().getShip()->getCurrentHarbor())
-                cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i].to->getName());
+        for(int i = 0; i < world.getHarborDistances().getUsed(); i++) {
+            if (world.getHarborDistances()[i]->from == world.getPlayer().getShip()->getCurrentHarbor())
+                cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i]->to->getName());
         }
 
         try {
             int input = std::stoi(cliViewController.getInput().c_str());
-            if(input >= 0 && input < world.getHarborDistancesSize() && world.getHarborDistances()[input].from == ship->getCurrentHarbor()) {
-                ship->setDestinationDistance(world.getHarborDistances()[input].distance);
-                ship->setDestination(world.getHarborDistances()[input].to);
+            if(input >= 0 && input < world.getHarborDistances().getUsed() && world.getHarborDistances()[input]->from == ship->getCurrentHarbor()) {
+                ship->setDestinationDistance(world.getHarborDistances()[input]->distance);
+                ship->setDestination(world.getHarborDistances()[input]->to);
                 ship->setCurrentHarbor(nullptr);
-                cliViewController.writeOutput(String("Destination set to: ") << world.getHarborDistances()[input].to->getName());
+                cliViewController.writeOutput(String("Destination set to: ") << world.getHarborDistances()[input]->to->getName());
             }
         }
         catch(std::invalid_argument) {

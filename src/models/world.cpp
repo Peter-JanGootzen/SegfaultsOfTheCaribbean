@@ -1,7 +1,7 @@
 #include "models/world.hpp"
 
-World::World(Player* player, Harbor* harbors, unsigned int harborsSize, HarborDistance* harborDistances, unsigned int harborDistancesSize) : 
-            player(player), harbors(harbors), harborsSize(harborsSize), harborDistances(harborDistances), harborDistancesSize(harborDistancesSize) {
+World::World(Player* player, Vector<Harbor*>* harbors, Vector<HarborDistance*>* harborDistances) : 
+            player(player), harbors(harbors), harborDistances(harborDistances) {
 
 }
 
@@ -9,29 +9,20 @@ Player& World::getPlayer() const {
     return *this->player;
 }
 
-HarborDistance* const World::getHarborDistances() const {
-    return this->harborDistances;
+Vector<HarborDistance*>& World::getHarborDistances() const {
+    return *this->harborDistances;
 }
-unsigned int World::getHarborDistancesSize() const {
-    return this->harborDistancesSize;
+Vector<Harbor*>& World::getHarbors() const {
+    return *this->harbors;
 }
-Harbor* const World::getHarbors() const {
-    return this->harbors;
-}
-unsigned int World::getHarborsSize() const {
-    return this->harborsSize;
-}
-
 World::~World() {
     delete player;
-    delete[] harborDistances;
-    delete[] harbors;
+    delete harborDistances;
+    delete harbors;
 }
 
 World::World(World&& other) {
     // stack
-    this->harborDistancesSize = other.harborDistancesSize;
-    this->harborsSize = other.harborsSize;
 
     // heap
     this->player = other.player;
@@ -58,8 +49,6 @@ World::World(World&& other) {
 World& World::operator=(World&& other) {
     if (this != &other) {
         // stack
-        this->harborDistancesSize = other.harborDistancesSize;
-        this->harborsSize = other.harborsSize;
 
         // heap
         if (this->player != nullptr)
