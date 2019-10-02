@@ -15,9 +15,8 @@ option(SANITIZER "Turn on the address sanitizer" OFF)
 if(SANITIZER)
     add_compile_options(-fsanitize=address -fno-omit-frame-pointer -O1)
     add_link_options(-fsanitize=address)
-else()
-    add_compile_options(-Wall -Wextra -pedantic)
 endif()
+add_compile_options(-Wall -Wextra -pedantic)
 
 add_executable(SegfaultsOfTheCaribbean
     ${files}
