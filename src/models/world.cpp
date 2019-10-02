@@ -1,7 +1,7 @@
 #include "models/world.hpp"
 
 World::World(Player* player, Vector<Harbor*>* harbors, Vector<HarborDistance*>* harborDistances) : 
-            player(player), harbors(harbors), harborDistances(harborDistances) {
+            player(player), harborDistances(harborDistances) ,harbors(harbors) {
 
 }
 

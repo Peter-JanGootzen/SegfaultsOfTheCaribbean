@@ -7,11 +7,13 @@ class Good {
 public:
     Good();
     Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount);
+    Good(String name, int currentAmount);
     String name;
     int getPrice() const;
     String getName() const;
     void randomizePrice();
     int getAmount() const;
+    void setAmount(int amount);
     void randomizeAmount();
 private:
     int minPrice;

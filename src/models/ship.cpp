@@ -4,8 +4,10 @@
 
 Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            int cannonCapacity, ShipWeight weight, ShipSize size) : 
-           name(name), price(price), maxHealth(maxHealth), 
-           cargoSpace(cargoSpace), cannonCapacity(cannonCapacity),
+           name(name), price(price), 
+           cargoSpace(cargoSpace),
+           cannonCapacity(cannonCapacity),
+           maxHealth(maxHealth),
            weight(weight), size(size) {
     this->cargo = new Vector<Good*>(true);
     this->cannons = new Vector<Cannon*>(true);
@@ -153,9 +155,9 @@ void Ship::setHealth(int health) {
     this->health += health;
 }
 
-int Ship::getCargoAmount() const {
-    int total = 0;
-    for (int i = 0; i < cargo->getSize(); i++) {
+size_t Ship::getCargoAmount() const {
+    size_t total = 0;
+    for (size_t i = 0; i < cargo->getSize(); i++) {
         total += cargo->get(i)->getAmount();
     }
     return total;
@@ -169,7 +171,7 @@ int Ship::getMaxHealth() const {
     return this->maxHealth;
 }
 
-int Ship::getCargoSpace() const {
+size_t Ship::getCargoSpace() const {
     return this->cargoSpace;
 }
 

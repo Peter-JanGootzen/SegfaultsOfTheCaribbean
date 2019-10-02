@@ -7,12 +7,22 @@ Good::Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount
     maxAmount(maxAmount) {
 
 };
+Good::Good(String name, int currentAmount) :
+    name(name), currentAmount(currentAmount) {
+
+};
 
 String Good::getName() const {
     return this->name;
 }
+int Good::getPrice() const {
+    return this->currentPrice;
+}
 int Good::getAmount() const {
-    return this->getAmount();
+    return this->currentAmount;
+}
+void Good::setAmount(int amount) {
+    this->currentAmount = amount;
 }
 void Good::randomizePrice() {
     this->currentPrice = Random::getInstance().getRandomInt(minPrice, maxPrice);

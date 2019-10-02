@@ -40,7 +40,6 @@ void BattleController::battle(Ship* s) {
 };
 
 void BattleController::shoot(Ship* ship, Ship* pirateShip) {
-    Random& random = Random::getInstance();
     int damage = calculateDamage(ship);
     pirateShip->applyDamage(damage);
     cliViewController.writeOutput(String("Your ship did ") << damage << " damage");
@@ -64,7 +63,7 @@ int BattleController::calculateDamage(Ship* ship) {
     if(ship->getCannons().getSize() == 0) {
         cliViewController.writeOutput(String("This ") << ship->getName() << String("does not have any cannons!"));
     }
-    for(int i = 0; i < ship->getCannons().getSize(); i++) {
+    for(size_t i = 0; i < ship->getCannons().getSize(); i++) {
         switch (ship->getCannons().get(i)->getCannonType())
         {
             case CannonType::Light:
@@ -143,7 +142,7 @@ bool BattleController::flee(Ship* s, Ship* pirateShip) {
 };
 
 void BattleController::surrender(Ship* s, Ship* pirateShip) {
-    for (int i = 0; i < s->getCargo().getSize(); i++) {
+    for (size_t i = 0; i < s->getCargo().getSize(); i++) {
         if(pirateShip->getCargo().getSize() >= pirateShip->getCargoSpace())
             pirateShip->getCargo().append(s->getCargo().remove_index(i));
         else
@@ -155,7 +154,6 @@ Ship* BattleController::spawnPirateShip() {
     Random& random = Random::getInstance();
     const int health = random.getRandomInt(1, 300);
     const int cannons = random.getRandomInt(0, 25);
-    const int cargoSpace = random.getRandomInt(25, 200);
     const int shipWeight = random.getRandomInt(0, 2);
     const int shipSize = random.getRandomInt(0,1);
 

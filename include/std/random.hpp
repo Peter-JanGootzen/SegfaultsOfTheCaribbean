@@ -6,7 +6,7 @@ class Random {
 
 public:
     Random();
-    ~Random()  { int i = 0; }
+    ~Random() = default;
     int getRandomInt(int min, int max);
     static Random& getInstance();
 private:

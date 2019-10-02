@@ -23,9 +23,9 @@ public:
     int getLightCannonStock() const;
     int getMediumCannonStock() const;
     int getHeavyCannonStock() const;
-    void setLightCannonStock();
-    void setMediumCannonStock();
-    void setHeavyCannonStock();
+    void setLightCannonStock(int amount);
+    void setMediumCannonStock(int amount);
+    void setHeavyCannonStock(int amount);
     void randomizeCannonStock();
 private:
     String name;

@@ -2,6 +2,7 @@
 #define FILE_VECTOR_HPP
 #include <stdexcept>
 #include <algorithm>
+#include <functional>
 template<class T>
 class Vector {
 public:
@@ -15,7 +16,7 @@ public:
     };
     ~Vector() {
         if (valuesAreOwned) {
-            for (int i = 0; i < size; i++) {
+            for (size_t i = 0; i < size; i++) {
                 delete (buffer[i]);
             }
         }
@@ -37,6 +38,14 @@ public:
         if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
+    T get_filter(std::function<bool (T)> filter) const {
+        for (size_t i = 0; i < size; i++) {
+            if (filter(buffer[i])) {
+                return buffer[i];
+            }
+        }
+        return nullptr;
+    }
     void append(T v) {
         auto newBuffer = new T[size + 1];
         if (buffer) {
@@ -52,19 +61,44 @@ public:
         if (index > size || !buffer) throw std::out_of_range("Please supply a valid range");
         T e = buffer[index];
 
-        auto newBuffer = new T[size];
+        auto newBuffer = new T[size - 1];
         std::copy_n(buffer, index, newBuffer);
         std::copy_n(buffer + index, size - index - 1, newBuffer + index);
+        delete[] buffer;
+        buffer = newBuffer;
         size--;
         return e;
     }
     // Searches
-    void remove(T v) {
+    T remove(T v) {
         for (size_t i = 0; i < size; i++) {
-            if (buffer[i] == v) {
-                remove_index(i); break;
+            if (buffer[i] == v)
+                return remove_index(i);
+        }
+        return nullptr;
+    }
+    T remove_filter(std::function<bool (T)> filter) {
+        for (size_t i = 0; i < size; i++) {
+            if (filter(buffer[i]))
+                return remove_index(i);
+        }
+        return nullptr;
+    }
+    bool has_filter(std::function<bool (T)> filter) const {
+        for (size_t i = 0; i < size; i++) {
+            if (filter(buffer[i]))
+                return true;
+        }
+        return false;
+    }
+    size_t count_filter(std::function<int  (T)> filter) {
+        size_t total = 0;
+        for (size_t i = 0; i < size; i++) {
+            if (filter(buffer[i])) {
+                total++;
             }
         }
+        return total;
     }
     size_t getSize() const {
         return size;

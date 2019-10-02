@@ -23,10 +23,10 @@ public:
     friend String operator<<(const String& r, const String& s);
     friend String operator<<(const String& s, int i);
     ~String();
-    int size() const;
+    size_t size() const;
     char* c_str() const;
 private:
-    int n;
+    size_t n;
     char* a;
 };
 

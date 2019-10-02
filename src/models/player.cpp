@@ -46,5 +46,5 @@ void Player::payMoney(int amount) {
 }
 
 void Player::receiveMoney(int amount) {
-    this->money -= amount;
+    this->money += amount;
 }

@@ -6,7 +6,7 @@
 #include "std/string.hpp"
 #include "std/random.hpp"
 
-int main(int argc, char const *argv[])
+int main()
 {
     Ship* ship = new Ship(String("Pinnace"), 10000, 100, 200, 8, ShipWeight::Light, ShipSize::Small);
     Player* player = new Player();

@@ -59,6 +59,25 @@ void Harbor::randomizeCannonStock() {
     this->heavyCannonStock = Random::getInstance().getRandomInt(0, 2);
 }
 
+int Harbor::getLightCannonStock() const {
+    return this->lightCannonStock;
+};
+int Harbor::getMediumCannonStock() const {
+    return this->mediumCannonStock;
+};
+int Harbor::getHeavyCannonStock() const {
+    return this->heavyCannonStock;
+};
+void Harbor::setLightCannonStock(int amount) {
+    this->lightCannonStock = amount;
+};
+void Harbor::setMediumCannonStock(int amount) {
+    this->mediumCannonStock = amount;
+};
+void Harbor::setHeavyCannonStock(int amount) {
+    this->heavyCannonStock = amount;
+};
+
 Harbor::~Harbor() {
     if (shipsForSale != nullptr)
         delete shipsForSale;

@@ -21,7 +21,7 @@ String::String(unsigned int size, const char* buffer) {
     std::memcpy(a, buffer, size);
 };
 
-int String::size() const {
+size_t String::size() const {
     return n;
 };
 
@@ -45,7 +45,7 @@ char& String::operator[](unsigned int i) const {
 bool String::operator==(const String& s) const noexcept {
     if (s.size() != this->size()) return false;
 
-    for(int i = 0; i < this->n; i++) {
+    for(size_t i = 0; i < this->n; i++) {
         if (s[i] != this->a[i]) return false;
     }
 
@@ -54,7 +54,7 @@ bool String::operator==(const String& s) const noexcept {
 
 std::ostream& operator<<(std::ostream& os, const String& s)
 {
-    for(int i = 0; i < s.size(); i++)
+    for(size_t i = 0; i < s.size(); i++)
     {
         os << s[i];
     }

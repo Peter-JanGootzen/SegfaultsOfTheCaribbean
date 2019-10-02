@@ -27,7 +27,7 @@ public:
     int getHealth() const;
     int getMaxHealth() const;
     int getPrice() const;
-    int getCargoSpace() const;
+    size_t getCargoSpace() const;
     int getCannonCapacity() const;
     int getDestinationDistance() const;
     Vector<Cannon*>& getCannons() const;
@@ -36,7 +36,7 @@ public:
     Harbor* getCurrentHarbor() const;
     Harbor* getDestination() const;
     Vector<Good*>& getCargo() const;
-    int getCargoAmount() const;
+    size_t getCargoAmount() const;
     bool isSunken() const;
     bool isDocked() const;
     // Setters
@@ -56,7 +56,7 @@ public:
 private:
     String name;
     int price;
-    int cargoSpace;
+    size_t cargoSpace;
     int cannonCapacity;
     int maxHealth;
     int health;
