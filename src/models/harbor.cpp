@@ -5,15 +5,15 @@
 Harbor::Harbor() {
     this->goodsForSale = new Vector<Good*>(true);
     this->shipsForSale = new Vector<Ship*>(true);
-};
+}
 Harbor::Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale) :
     name(name), shipsForSale(shipsForSale), goodsForSale(goodsForSale) {
 
-};
+}
 
 String Harbor::getName() const {
     return this->name;
-};
+}
 
 Harbor::Harbor(Harbor&& other) {
     // stack
@@ -61,22 +61,22 @@ void Harbor::randomizeCannonStock() {
 
 int Harbor::getLightCannonStock() const {
     return this->lightCannonStock;
-};
+}
 int Harbor::getMediumCannonStock() const {
     return this->mediumCannonStock;
-};
+}
 int Harbor::getHeavyCannonStock() const {
     return this->heavyCannonStock;
-};
+}
 void Harbor::setLightCannonStock(int amount) {
     this->lightCannonStock = amount;
-};
+}
 void Harbor::setMediumCannonStock(int amount) {
     this->mediumCannonStock = amount;
-};
+}
 void Harbor::setHeavyCannonStock(int amount) {
     this->heavyCannonStock = amount;
-};
+}
 
 Harbor::~Harbor() {
     if (shipsForSale != nullptr)

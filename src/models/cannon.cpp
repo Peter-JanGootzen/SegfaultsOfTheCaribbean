@@ -3,8 +3,8 @@
 
 Cannon::Cannon(CannonType type) : type(type) {
 
-};
+}
 
 CannonType Cannon::getCannonType() {
     return type;
-};
+}

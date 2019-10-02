@@ -37,7 +37,7 @@ void BattleController::battle(Ship* s) {
         } while (input_failed);
     }
     delete pirateShip;
-};
+}
 
 void BattleController::shoot(Ship* ship, Ship* pirateShip) {
     int damage = calculateDamage(ship);
@@ -55,7 +55,7 @@ void BattleController::shoot(Ship* ship, Ship* pirateShip) {
     if(pirateShip->isSunken()) {
         cliViewController.writeOutput(String("You defeated the pirate ship!"));
     }
-};
+}
 
 int BattleController::calculateDamage(Ship* ship) {
     Random& random = Random::getInstance();
@@ -139,7 +139,7 @@ bool BattleController::flee(Ship* s, Ship* pirateShip) {
     pirateShip->applyDamage(damage);
     cliViewController.writeOutput(String("Your ship got ") << damage << " damage");
     return false;
-};
+}
 
 void BattleController::surrender(Ship* s, Ship* pirateShip) {
     for (size_t i = 0; i < s->getCargo().getSize(); i++) {
@@ -148,7 +148,7 @@ void BattleController::surrender(Ship* s, Ship* pirateShip) {
         else
             s->getCargo().remove_index(i);
     }
-};
+}
 
 Ship* BattleController::spawnPirateShip() {
     Random& random = Random::getInstance();
@@ -165,4 +165,4 @@ Ship* BattleController::spawnPirateShip() {
         ship->addCannon(cannon);
     }
     return ship;
-};
+}

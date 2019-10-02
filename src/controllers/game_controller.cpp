@@ -12,7 +12,7 @@ GameController::GameController(World* w) :
     cliViewController = new CliViewController();
     seaController = new SeaController(*w, *cliViewController);
     harborController = new HarborController(*w, *cliViewController);
-};
+}
 
 void GameController::start() {
     cliViewController->writeOutput("Welcome to Segfaults of the Caribbean!");
@@ -33,7 +33,7 @@ void GameController::start() {
         }
         try {
             const String input_string = cliViewController->getInput();
-            const size_t input = std::atoi(input_string.c_str());
+            const int input = std::atoi(input_string.c_str());
             if(input >= 0 && input < world->getHarbors().getSize()) {
                 world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
@@ -44,7 +44,7 @@ void GameController::start() {
         }
         catch(std::invalid_argument) {
             input_failed = true;
-        };
+        }
     } while(input_failed == true);
 }
 
@@ -64,11 +64,11 @@ void GameController::gameLoop() {
         }
         cliViewController->writeOutput(String("---------------------------------------------------------------------------------------"));
     }
-};
+}
 
 GameController::~GameController() {
     delete this->world;
     delete this->seaController;
     delete this->harborController;
     delete this->cliViewController;
-};
+}

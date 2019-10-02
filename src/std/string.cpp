@@ -6,7 +6,7 @@
 String::String() {
     n = 0;
     a = nullptr;
-};
+}
 String::String(const char* buffer) {
     n = 1;
     const char* temp = buffer;
@@ -14,20 +14,20 @@ String::String(const char* buffer) {
         n++;
     a = new char[n];
     std::memcpy(a, temp, n);
-};
+}
 String::String(unsigned int size, const char* buffer) {
     n = size;
     a = new char[size];
     std::memcpy(a, buffer, size);
-};
+}
 
 size_t String::size() const {
     return n;
-};
+}
 
 char* String::c_str() const {
     return a;
-};
+}
 
 String String::operator+(const String& s) {
     int newSize = n + s.size();
@@ -36,7 +36,7 @@ String String::operator+(const String& s) {
     std::strcat(newBuffer, s.a);
     String newString = String(newSize, newBuffer);
     return newString;
-};
+}
 char& String::operator[](unsigned int i) const {
     if (i > this->size())
         throw std::out_of_range("Please supply a valid range");
@@ -103,7 +103,7 @@ String operator<<(const String& r, const String& s)
     String string = String(buffer);
     delete[] buffer;
     return string;
-};
+}
 
 /// Rule of Five
 // copy constructor, should not kill the other value
@@ -154,4 +154,4 @@ String& String::operator=(String&& other) {
 String::~String() {
     if (a)
         delete[] a;
-};
+}

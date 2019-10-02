@@ -13,12 +13,12 @@ Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
     this->cannons = new Vector<Cannon*>(true);
     this->currentHarbor = nullptr;
     this->health = maxHealth;
-};
+}
 
 Ship::Ship() {
     this->cargo = new Vector<Good*>(true);
     this->currentHarbor = nullptr;
-};
+}
 
 Ship::Ship(Ship&& other) {
     // stack
@@ -40,7 +40,7 @@ Ship::Ship(Ship&& other) {
     other.cargo = nullptr;
     this->cannons = other.cannons;
     other.cannons = nullptr;
-};
+}
  
 Ship& Ship::operator=(Ship&& other) {
     if(this != &other) {
@@ -69,49 +69,49 @@ Ship& Ship::operator=(Ship&& other) {
         other.cannons = nullptr;
     }
     return *this;
-};
+}
 
 Ship::~Ship() {
     if (this->cargo != nullptr)
         delete this->cargo;
     if (this->cannons != nullptr)
         delete this->cannons;
-};
+}
 
 ShipWeight Ship::getShipWeight() const {
     return this->weight;
-};
+}
 ShipSize Ship::getShipSize() const {
     return this->size;
-};
+}
 Vector<Cannon*>& Ship::getCannons() const {
     return *this->cannons;
-};
+}
 void Ship::applyDamage(int damage) {
     this->health -= damage;
-};
+}
 void Ship::repair(int amount) {
     if (this->health + amount >= this->maxHealth)
         this->health = maxHealth;
     else
         this->health += amount;
-};
+}
 
 void Ship::addCannon(Cannon* cannon) {
     this->cannons->append(cannon);
-};
+}
 
 bool Ship::isSunken() const {
     return this->health <= 0;
-};
+}
 
 bool Ship::isDocked() const {
     return this->currentHarbor != nullptr;
-};
+}
 
 void Ship::sail(int distance) {
     this->destinationDistance -= distance;
-};
+}
 
 void Ship::dock() {
     this->destinationDistance = 0;

@@ -29,7 +29,7 @@ bool SeaController::sail() {
         throw std::out_of_range("This shouldn't have happend...");
     }
     return false;
-};
+}
 
 void SeaController::move() {
     auto s = world.getPlayer().getShip();

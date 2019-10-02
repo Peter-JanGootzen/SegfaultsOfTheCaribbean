@@ -17,7 +17,7 @@ void HarborController::dockShip() {
             h->randomizeCannonStock();
         }
     }
-};
+}
 
 void HarborController::tradeCannons() {
     Player& p = world.getPlayer();
@@ -121,7 +121,7 @@ void HarborController::tradeCannons() {
             }
         } catch(std::invalid_argument) {  
             input_failed = true;
-        };
+        }
     } while(input_failed == true);
 }
 
@@ -179,7 +179,7 @@ void HarborController::tradeGoods() {
                     }
                     catch(std::invalid_argument) {
                         input_failed = true;
-                    };
+                    }
                 }
             } else if (input == String("sell")) {
                 cliViewController.writeOutput(String("Enter the name of the good you want to sell"));
@@ -212,14 +212,14 @@ void HarborController::tradeGoods() {
                     }
                     catch(std::invalid_argument) {
                         input_failed = true;
-                    };
+                    }
                 }
             } else {
                 input_failed = true;
             }
         } catch(std::invalid_argument) {  
             input_failed = true;
-        };
+        }
     } while(input_failed == true);
 }
 
@@ -272,7 +272,7 @@ void HarborController::buyShip() {
         }
         catch(std::invalid_argument) {
             input_failed = true;
-        };
+        }
     } while(input_failed == true);
 }
 
@@ -284,7 +284,7 @@ void HarborController::repairShip() {
     {
         cliViewController.writeOutput(String("You do not have enough money!"));
     }
-};
+}
 
 void HarborController::setSail() {
     const Player& player = world.getPlayer();
@@ -315,9 +315,9 @@ void HarborController::setSail() {
         }
         catch(std::invalid_argument) {
             input_failed = true;
-        };
+        }
     } while(input_failed == true);
-};
+}
 
 bool HarborController::presentOptions() {
     const Player* player = &world.getPlayer();
@@ -361,4 +361,4 @@ bool HarborController::presentOptions() {
         }
     } while(input_failed == true);
     return false;
-};
+}
