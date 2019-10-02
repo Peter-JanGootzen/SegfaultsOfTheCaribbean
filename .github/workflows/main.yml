@@ -13,9 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Build
+    - name: Build Clang
       run: |
         cd build
+        CXX=clang++
+        rm CMakeCache.txt -f
+        cmake ..
+        make
+    - name: Build GCC
+      run: |
+        cd build
+        CXX=g++
+        rm CMakeCache.txt -f
         cmake ..
         make
     - uses: actions/upload-artifact@master
