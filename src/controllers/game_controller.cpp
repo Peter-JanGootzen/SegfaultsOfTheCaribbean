@@ -15,8 +15,8 @@ GameController::GameController(World* w) :
 }
 
 void GameController::start() {
-    cliViewController->writeOutput("Welcome to Segfaults of the Caribbean!");
-    cliViewController->writeOutput("Good luck in the dangerous waters of the Caribbean.");
+    cliViewController->writeOutput(String("Welcome to Segfaults of the Caribbean!"));
+    cliViewController->writeOutput(String("Good luck in the dangerous waters of the Caribbean."));
 
     // Choosing a starting harbor
     bool input_failed = false;

@@ -6,6 +6,10 @@ Harbor::Harbor() {
     this->goodsForSale = new Vector<Good*>(true);
     this->shipsForSale = new Vector<Ship*>(true);
 }
+Harbor::Harbor(String name) : name(name) {
+    this->goodsForSale = new Vector<Good*>(true);
+    this->shipsForSale = new Vector<Ship*>(true);
+}
 Harbor::Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale) :
     name(name), shipsForSale(shipsForSale), goodsForSale(goodsForSale) {
 

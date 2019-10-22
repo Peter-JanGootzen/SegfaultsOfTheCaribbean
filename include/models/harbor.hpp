@@ -15,6 +15,7 @@ public:
     Harbor(const Harbor& other) = delete;
     Harbor& operator=(Harbor&& other);
     Harbor& operator=(const Harbor& other) = delete;
+    Harbor(String name);
     Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale);
 
     String getName() const;
