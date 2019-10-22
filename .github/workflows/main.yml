@@ -16,14 +16,14 @@ jobs:
     - name: Build Clang
       run: |
         cd build
-        CXX=clang++
+        export CXX=clang++
         rm CMakeCache.txt -f
         cmake ..
         make
     - name: Build GCC
       run: |
         cd build
-        CXX=g++
+        export CXX=g++
         rm CMakeCache.txt -f
         cmake ..
         make
