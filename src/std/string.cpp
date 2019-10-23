@@ -191,13 +191,13 @@ String String::substr(size_t from, size_t to) {
 }
 
 size_t String::find(char delim) {
-    if (!a) return -1;
+    if (!a) throw std::out_of_range("The delimiter could not be found in the String");
 
     size_t i = 0;
     while(a[i] != delim) {
         i++;
         if (i > n - 1)
-            return -1;
+            throw std::out_of_range("The delimiter could not be found in the String");
     }
     return i;
 }

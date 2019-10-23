@@ -28,7 +28,7 @@ public:
     int getMaxHealth() const;
     int getPrice() const;
     size_t getCargoSpace() const;
-    int getCannonCapacity() const;
+    size_t getCannonCapacity() const;
     int getDestinationDistance() const;
     Vector<Cannon*>& getCannons() const;
     ShipWeight getShipWeight() const;
@@ -57,7 +57,7 @@ private:
     String name;
     int price;
     size_t cargoSpace;
-    int cannonCapacity;
+    size_t cannonCapacity;
     int maxHealth;
     int health;
     int destinationDistance;

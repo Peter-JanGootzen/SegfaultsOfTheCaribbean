@@ -239,8 +239,8 @@ void HarborController::buyShip() {
     }
 
     try {
-        const size_t input = std::stoi(cliViewController.getInput().c_str());
-        if(0 && input < harbor->getShipsForSale().getSize()) {
+        const size_t input = std::stol(cliViewController.getInput().c_str());
+        if(input < harbor->getShipsForSale().getSize()) {
             auto shipToBuy = harbor->getShipsForSale().get(input);
             if (player.getMoney() - shipToBuy->getPrice() + (player.getShip()->getPrice() / 2) < 0) {
                 cliViewController.writeOutput(String("You do not have enough money to buy this ship"));

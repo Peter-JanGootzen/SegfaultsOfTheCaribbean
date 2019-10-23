@@ -179,7 +179,7 @@ int Ship::getPrice() const {
     return this->price;
 }
 
-int Ship::getCannonCapacity() const {
+size_t Ship::getCannonCapacity() const {
     return this->cannonCapacity;
 }
 

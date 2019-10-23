@@ -33,8 +33,8 @@ void GameController::start() {
         }
         try {
             const String input_string = cliViewController->getInput();
-            const int input = std::atoi(input_string.c_str());
-            if(input >= 0 && input < world->getHarbors().getSize()) {
+            const size_t input = std::stol(input_string.c_str());
+            if(input < world->getHarbors().getSize()) {
                 world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
             } else

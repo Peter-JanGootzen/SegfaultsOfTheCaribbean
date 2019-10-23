@@ -84,10 +84,10 @@ World* createWorld() {
             String* spec = (*(*ships)[i])[5];
             String* spec_first = nullptr;
             String* spec_second = nullptr;
-            if(spec->find(',') != -1) {
+            try {
                 spec_first = new String(spec->substr(0, spec->find(',')));
                 spec_second = new String(spec->substr(spec->find(',') + 1, spec->size() - 1));
-            } else {
+            } catch (const std::out_of_range& ex) {
                 spec_first = new String(*spec);
             }
             auto specialties = Vector<String*>(true);
@@ -130,7 +130,7 @@ World* createWorld() {
     return world;
 }
 
-int main(int argc, const char* argv[])
+int main(int, const char* argv[])
 {
     int exit_code = EXIT_SUCCESS;
     try {
@@ -145,32 +145,6 @@ int main(int argc, const char* argv[])
     } catch (...) {
         std::cerr << "An exception has occured" << std::endl;
     }
-    
+
     return exit_code;
-    //unique_ptr<Vector<String*>> u { new Vector<String*>(true) };
-    //u->append(new String("HALLO"));
-    //u->append(new String(""));
-
-    //auto y = u.release();
-    //auto z = unique_ptr(y);
-    //auto x = std::move(z);
-    //std::cout << (*x)[0] << std::endl;
-   //String a {"a"};
-
-    //char* b_ptr = new char[1];
-    //b_ptr[0] = 'b';
-    //String b {1, b_ptr};
-
-    //String c = a + b;
-
-    //std::cout << String("test ") << 1 << std::endl;
-    //std::cout << String("test ") << String("Test 2") << std::endl;
-    //String d = String("test ");
-    //d.append('k');
-    //std::cout << d << std::endl;
-    //auto e = String("hoi-doei");
-    //std::cout << e.substr(0, e.find('-')) << std::endl;
-    //std::cout << e.substr(e.find('-'), e.size()) << std::endl;
-    //a == a;
-    //delete[] b_ptr;
 }
