@@ -4,8 +4,9 @@
 #include "std/string.hpp"
 
 String::String() {
-    n = 0;
-    a = nullptr;
+    n = 1;
+    a = new char[1];
+    a[0] = '\0';
 }
 // C-String as parameter
 String::String(const char* buffer) {
@@ -14,41 +15,47 @@ String::String(const char* buffer) {
     while(*buffer++)
         n++;
     if (n == 1) {
-        n = 0;
-        a = nullptr;
+        n = 1;
+        a = new char[1];
+        a[0] = '\0';
     }
     else {
-        n--;
         a = new char[n];
         std::memcpy(a, temp, n);
     }
 }
-String::String(unsigned int size, const char* buffer) {
+String::String(size_t size, const char* buffer) {
     n = size;
-    a = new char[size];
-    std::memcpy(a, buffer, size);
+    if(buffer[size - 1] != '\0') {
+        n++;
+        a = new char[n];
+        std::memcpy(a, buffer, size);
+        a[n - 1] = '\0';
+    } else {
+        a = new char[n];
+        std::memcpy(a, buffer, n);
+    }
 }
 
 size_t String::size() const {
-    return n;
+    return n - 1;
 }
 
 char* String::c_str() const {
-    char* c_str = new char[n + 1];
-    std::memcpy(c_str, a, n);
-    c_str[n] = '\0';
-    return c_str;
+    return a;
 }
 
 String String::operator+(const String& s) {
-    int newSize = n + s.size();
+    size_t newSize = n + s.n - 1;
+    std::cout << newSize << std::endl;
     auto newBuffer = new char[newSize];
-    std::memcpy(newBuffer, a, n);
-    std::memcpy(newBuffer + n, s.a, s.n);
+    std::memcpy(newBuffer, a, n - 1);
+    std::memcpy(newBuffer + n - 1, s.a, s.n);
     String newString = String(newSize, newBuffer);
+    delete[] newBuffer;
     return newString;
 }
-char& String::operator[](unsigned int i) const {
+char& String::operator[](size_t i) const {
     if (i > this->size())
         throw std::out_of_range("Please supply a valid range");
     return a[i];
@@ -56,7 +63,7 @@ char& String::operator[](unsigned int i) const {
 bool String::operator==(const String& s) const noexcept {
     if (s.size() != this->size()) return false;
 
-    for(size_t i = 0; i < this->n; i++) {
+    for(size_t i = 0; i < this->size(); i++) {
         if (s[i] != this->a[i]) return false;
     }
 
@@ -84,7 +91,7 @@ String operator<<(const String& s, int i) {
     char* bff_ptr = buffer;
     if(s.a) {
         std::memcpy(buffer, s.a, s.size());
-        bff_ptr+=s.size() - 1;
+        bff_ptr+=s.size();
     }
     sprintf(bff_ptr,"%d", i);
     String input = String(buffer);
@@ -94,10 +101,10 @@ String operator<<(const String& s, int i) {
 
 String operator<<(const String& r, const String& s)
 {
-    int sSize = 0;
+    size_t sSize = 0;
     if (s.a)
-        sSize = s.size();
-    int rSize = 0;
+        sSize = s.size() + 1;
+    size_t rSize = 0;
     if (r.a)
         rSize = r.size();
     char* buffer = new char[sSize + rSize];
@@ -126,8 +133,7 @@ String& String::operator=(const String& other) {
         // stack
         this->n = other.n;
         // heap
-        if (this->a != nullptr)
-            delete[] this->a;
+        delete[] this->a;
         this->a = new char[other.n];
         std::memcpy(this->a, other.a, this->n);
     }
@@ -149,8 +155,7 @@ String& String::operator=(String&& other) {
         // stack
         n = other.n;
         // heap
-        if (this->a != nullptr)
-            delete[] a;
+        delete[] a;
         a = other.a;
         other.a = nullptr;
     }
@@ -163,19 +168,21 @@ String::~String() {
 
 
 void String::append(char x) {
-    int newSize = n + 1;
+    // One for the new char, one for the null byte
+    size_t newSize = size() + 1 + 1;
     auto newBuffer = new char[newSize];
-    if (a != nullptr) {
-        std::memcpy(newBuffer, a, n);
-        delete[] a;
+    if (n != 1) {
+        std::memcpy(newBuffer, a, size());
     }
-    newBuffer[newSize - 1] = x;
+    delete[] a;
+    newBuffer[newSize - 2] = x;
+    newBuffer[newSize - 1] = '\0';
     n = newSize;
     a = newBuffer;
 }
 
 String String::substr(size_t from, size_t to) {
-    int size = to - from;
+    size_t size = to - from + 1;
     char* buffer = new char[size];
     std::memcpy(buffer, a + from, size);
     auto string = String(size, buffer);

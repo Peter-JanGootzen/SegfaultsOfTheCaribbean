@@ -37,12 +37,11 @@ World* createWorld() {
             }
         }
     }
-    distances->~Vector();
+    delete distances;
 
     auto goods_prices = r.readFile(String("../data/goods_prices.csv"));
     auto goods_amounts = r.readFile(String("../data/goods_amounts.csv"));
 
-    auto goods = new Vector<Good*>(true);
     Vector<String*>* goods_header = nullptr;
     for (size_t i = 0; i < goods_prices->getSize(); i++) {
         if (i == 0) { // header
@@ -68,16 +67,16 @@ World* createWorld() {
             }
         }
     }
-    goods_prices->~Vector();
-    goods_amounts->~Vector();
+    delete goods_prices;
+    delete goods_amounts;
 
 
     auto ships = r.readFile(String("../data/ships.csv"));
     auto ship_array = Vector<Ship*>(true);
-    Vector<String*>* ships_header = nullptr;
     for (size_t i = 0; i < ships->getSize(); i++) {
         if (i == 0) {
-            ships_header = (*ships)[i];
+            // Ignore the header
+            continue;
         }
         else {
             String name = *(*(*ships)[i])[0];
@@ -92,11 +91,12 @@ World* createWorld() {
                 spec_first = new String(spec->substr(0, spec->find(',')));
                 spec_second = new String(spec->substr(spec->find(',') + 1, spec->size() - 1));
             } else {
-                spec_first = spec;
+                spec_first = new String(*spec);
             }
             auto specialties = Vector<String*>(true);
             specialties.append(spec_first);
-            specialties.append(spec_second);
+            if(spec_second != nullptr)
+                specialties.append(spec_second);
             ShipWeight weight = ShipWeight::Normal;
             ShipSize size = ShipSize::Normal;
             for(size_t i = 0; i < specialties.getSize(); i++) {
@@ -113,8 +113,24 @@ World* createWorld() {
         }
     }
 
-    // WORLD
+    delete ships;
+
     auto player = new Player();
+    player->setShip(ship_array.remove_index(0));
+    // Divide ships over harbors
+    Random& random = Random::getInstance();
+    while(true) {
+        for(size_t i = 0; i < harbors->getSize(); i++) {
+            for (size_t k = 0; k < 4; k++) {
+                if(random.getRandomInt(1, 100) > 50) {
+                    (*harbors)[i]->getShipsForSale().append(ship_array.remove_index(0));
+                    if(ship_array.getSize() == 0) goto exit_looping;
+                }
+            }
+        }
+    }
+    exit_looping:
+    // WORLD
     auto world = new World(player, harbors, harbor_distances);
     return world;
 }
@@ -125,4 +141,22 @@ int main()
     auto gc = GameController(world);
     gc.start();
     gc.gameLoop();
+    //String a {"a"};
+
+    //char* b_ptr = new char[1];
+    //b_ptr[0] = 'b';
+    //String b {1, b_ptr};
+
+    //String c = a + b;
+
+    //std::cout << String("test ") << 1 << std::endl;
+    //std::cout << String("test ") << String("Test 2") << std::endl;
+    //String d = String("test ");
+    //d.append('k');
+    //std::cout << d << std::endl;
+    //auto e = String("hoi-doei");
+    //std::cout << e.substr(0, e.find('-')) << std::endl;
+    //std::cout << e.substr(e.find('-'), e.size()) << std::endl;
+    //a == a;
+    //delete[] b_ptr;
 }

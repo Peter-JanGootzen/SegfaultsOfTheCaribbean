@@ -63,7 +63,7 @@ public:
 
         auto newBuffer = new T[size - 1];
         std::copy_n(buffer, index, newBuffer);
-        std::copy_n(buffer + index, size - index - 1, newBuffer + index);
+        std::copy_n(buffer + index + 1, size - index - 1, newBuffer + index);
         delete[] buffer;
         buffer = newBuffer;
         size--;

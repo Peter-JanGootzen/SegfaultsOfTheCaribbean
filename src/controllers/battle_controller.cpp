@@ -19,6 +19,7 @@ void BattleController::battle(Ship* s) {
                 input_failed = false;
             }
             int health = pirateShip->getHealth();
+            cliViewController.writeOutput(String("Your ship has ") << s->getHealth() << " health left");
             cliViewController.writeOutput(String("The pirate ship has ") << health << " health left");
             cliViewController.writeOutput(String("These are your battling options:"));
             cliViewController.writeOutput(String("shoot, flee or surrender"));

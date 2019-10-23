@@ -7,7 +7,7 @@ class String {
 public:
     String();
     String(const char* buffer);
-    String(unsigned int size, const char* buffer);
+    String(size_t size, const char* buffer);
     // copy constructor, should not kill the other value
     String(const String& other);
     // copy assignment operator, should not kill the other value
@@ -17,7 +17,7 @@ public:
     // move assignment operator, should kill the other value
     String& operator=(String&& other);
     String operator+(const String& s);
-    char& operator[](unsigned int i) const;
+    char& operator[](size_t i) const;
     bool operator==(const String& s) const noexcept;
     friend std::ostream& operator<<(std::ostream& os, const String& s);
     friend String operator<<(const String& r, const String& s);

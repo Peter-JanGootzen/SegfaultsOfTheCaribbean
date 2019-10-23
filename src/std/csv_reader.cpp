@@ -33,6 +33,8 @@ Vector<Vector<String*>*>* CSVReader::readFile(String path) {
         if (row_end == file_end)
             break;
     }
+
+    delete[] file;
     return table;
 }
 
