@@ -122,7 +122,7 @@ void HarborController::tradeCannons() {
             } else {
                 input_failed = true;
             }
-        } catch(std::invalid_argument) {  
+        } catch(const std::invalid_argument&) {  
             input_failed = true;
         }
     } while(input_failed == true);
@@ -180,7 +180,7 @@ void HarborController::tradeGoods() {
                             input_failed = true;
                         }
                     }
-                    catch(std::invalid_argument) {
+                    catch(const std::invalid_argument&) {
                         input_failed = true;
                     }
                 }
@@ -215,14 +215,14 @@ void HarborController::tradeGoods() {
                             input_failed = true;
                         }
                     }
-                    catch(std::invalid_argument) {
+                    catch(const std::invalid_argument&) {
                         input_failed = true;
                     }
                 }
             } else {
                 input_failed = true;
             }
-        } catch(std::invalid_argument) {  
+        } catch(const std::invalid_argument&) {  
             input_failed = true;
         }
     } while(input_failed == true);
@@ -240,7 +240,7 @@ void HarborController::buyShip() {
 
     try {
         const size_t input = std::stoi(cliViewController.getInput().c_str());
-        if(input >= 0 && input < harbor->getShipsForSale().getSize()) {
+        if(0 && input < harbor->getShipsForSale().getSize()) {
             auto shipToBuy = harbor->getShipsForSale().get(input);
             if (player.getMoney() - shipToBuy->getPrice() + (player.getShip()->getPrice() / 2) < 0) {
                 cliViewController.writeOutput(String("You do not have enough money to buy this ship"));
@@ -275,7 +275,7 @@ void HarborController::buyShip() {
             return;
         }
     }
-    catch(std::invalid_argument) {
+    catch(const std::invalid_argument&) {
         cliViewController.writeOutput(String("The given input was incorrect!"));
         return;
     }
@@ -309,20 +309,20 @@ void HarborController::setSail() {
 
         cliViewController.writeOutput(String("These are your sailing options:"));
         for(size_t i = 0; i < world.getHarborDistances().getSize(); i++) {
-            if (world.getHarborDistances()[i]->from == world.getPlayer().getShip()->getCurrentHarbor())
-                cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i]->to->getName());
+            if (world.getHarborDistances()[i]->getFrom() == world.getPlayer().getShip()->getCurrentHarbor())
+                cliViewController.writeOutput(String() << i << ": " << world.getHarborDistances()[i]->getTo()->getName());
         }
 
         try {
             const size_t input = std::stoi(cliViewController.getInput().c_str());
-            if(input >= 0 && input < world.getHarborDistances().getSize() && world.getHarborDistances()[input]->from == ship->getCurrentHarbor()) {
-                ship->setDestinationDistance(world.getHarborDistances()[input]->distance);
-                ship->setDestination(world.getHarborDistances()[input]->to);
+            if(input < world.getHarborDistances().getSize() && world.getHarborDistances()[input]->getFrom() == ship->getCurrentHarbor()) {
+                ship->setDestinationDistance(world.getHarborDistances()[input]->getDistance());
+                ship->setDestination(world.getHarborDistances()[input]->getTo());
                 ship->setCurrentHarbor(nullptr);
-                cliViewController.writeOutput(String("Destination set to: ") << world.getHarborDistances()[input]->to->getName());
+                cliViewController.writeOutput(String("Destination set to: ") << world.getHarborDistances()[input]->getTo()->getName());
             }
         }
-        catch(std::invalid_argument) {
+        catch(const std::invalid_argument&) {
             input_failed = true;
         }
     } while(input_failed == true);

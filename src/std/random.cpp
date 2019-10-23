@@ -11,7 +11,7 @@ Random::Random() {
     std::default_random_engine dre(device());
 }
 
-int Random::getRandomInt(int min, int max) {
+int Random::getRandomInt(int min, int max) noexcept {
     std::uniform_int_distribution<int> distribution(min, max);
     return distribution(device);
 }

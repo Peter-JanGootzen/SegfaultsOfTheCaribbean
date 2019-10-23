@@ -8,14 +8,14 @@ public:
     Good();
     Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount);
     Good(String name, int currentAmount);
-    String name;
     int getPrice() const;
-    String getName() const;
+    String getName() const noexcept;
     void randomizePrice();
     int getAmount() const;
     void setAmount(int amount);
     void randomizeAmount();
 private:
+    String name;
     int minPrice;
     int maxPrice;
     int currentPrice;

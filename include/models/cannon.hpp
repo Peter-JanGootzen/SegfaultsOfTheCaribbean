@@ -4,10 +4,9 @@
 
 // WHooh no rule of five here!
 class Cannon {
-
 public:
     Cannon(CannonType type);
-    CannonType getCannonType();
+    CannonType getCannonType() const;
     ~Cannon() = default;
 private:
     CannonType type;

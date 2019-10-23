@@ -17,7 +17,7 @@ public:
     ~Vector() {
         if (valuesAreOwned) {
             for (size_t i = 0; i < size; i++) {
-                delete (buffer[i]);
+                delete buffer[i];
             }
         }
         delete[] buffer;
@@ -27,9 +27,28 @@ public:
     // copy assignment operator, should not kill the other value
     Vector& operator=(const Vector& other) = delete;
     // move constructor, should kill the other value
-    Vector(Vector&& other) = delete;
+    Vector(Vector&& other) {
+        size = other.size;
+
+        buffer = other.buffer;
+        other.buffer = nullptr;
+    }
     // move assignment operator, should kill the other value
-    Vector& operator=(Vector&& other) = delete;
+    Vector& operator=(Vector&& other) {
+        if (this != &other) {
+            size = other.size;
+
+            if (valuesAreOwned) {
+                for (size_t i = 0; i < size; i++) {
+                    delete buffer[i];
+                }
+            }
+            delete[] buffer;
+            this.buffer = other.buffer;
+            other.buffer = nullptr;
+        }
+        return *this;
+    }
     T& operator[](size_t i) const {
         if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
@@ -102,6 +121,9 @@ public:
     }
     size_t getSize() const {
         return size;
+    }
+    bool empty() const {
+        return size == 0;
     }
     // todo rule of five
 private:

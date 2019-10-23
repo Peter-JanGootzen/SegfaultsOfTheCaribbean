@@ -42,7 +42,7 @@ void GameController::start() {
                 input_failed = true;
             }
         }
-        catch(std::invalid_argument) {
+        catch(const std::invalid_argument&) {
             input_failed = true;
         }
     } while(input_failed == true);

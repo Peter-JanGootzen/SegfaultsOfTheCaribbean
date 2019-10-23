@@ -8,6 +8,12 @@ class HarborDistance {
 public:
     HarborDistance();
     HarborDistance(Harbor* from, Harbor* to, int distance);
+    // This is a pointer because it will get used in the player, which needs a ptr
+    Harbor* getFrom() const;
+    // This is a pointer because it will get used in the player, which needs a ptr
+    Harbor* getTo() const;
+    int getDistance() const;
+private:
     Harbor* from;
     Harbor* to;
     int distance;

@@ -4,15 +4,11 @@
 Good::Good() {}
 Good::Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount) :
     name(name), minPrice(minPrice), maxPrice(maxPrice), minAmount(minAmount),
-    maxAmount(maxAmount) {
-
-}
+    maxAmount(maxAmount) {}
 Good::Good(String name, int currentAmount) :
-    name(name), currentAmount(currentAmount) {
+    name(name), currentAmount(currentAmount) {}
 
-}
-
-String Good::getName() const {
+String Good::getName() const noexcept {
     return this->name;
 }
 int Good::getPrice() const {

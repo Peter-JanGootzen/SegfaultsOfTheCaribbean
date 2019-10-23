@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <utility>
 #include "models/world.hpp"
 #include "models/enums/ship_weight.hpp"
@@ -37,7 +38,6 @@ World* createWorld() {
             }
         }
     }
-    delete distances;
 
     auto goods_prices = r.readFile(String("../data/goods_prices.csv"));
     auto goods_amounts = r.readFile(String("../data/goods_amounts.csv"));
@@ -67,9 +67,6 @@ World* createWorld() {
             }
         }
     }
-    delete goods_prices;
-    delete goods_amounts;
-
 
     auto ships = r.readFile(String("../data/ships.csv"));
     auto ship_array = Vector<Ship*>(true);
@@ -113,8 +110,6 @@ World* createWorld() {
         }
     }
 
-    delete ships;
-
     auto player = new Player();
     player->setShip(ship_array.remove_index(0));
     // Divide ships over harbors
@@ -135,13 +130,32 @@ World* createWorld() {
     return world;
 }
 
-int main()
+int main(int argc, const char* argv[])
 {
-    auto world = createWorld();
-    auto gc = GameController(world);
-    gc.start();
-    gc.gameLoop();
-    //String a {"a"};
+    int exit_code = EXIT_SUCCESS;
+    try {
+        auto world = createWorld();
+        auto gc = GameController(world);
+        gc.start(); gc.gameLoop();
+    } catch(const std::ifstream::failure& e) {
+        std::cerr << e.what() << std::endl;
+    } catch( const std::exception& ex) {
+        std::cerr << argv[0] << ": " << ex.what() << std::endl;
+        exit_code = EXIT_FAILURE;
+    } catch (...) {
+        std::cerr << "An exception has occured" << std::endl;
+    }
+    
+    return exit_code;
+    //unique_ptr<Vector<String*>> u { new Vector<String*>(true) };
+    //u->append(new String("HALLO"));
+    //u->append(new String(""));
+
+    //auto y = u.release();
+    //auto z = unique_ptr(y);
+    //auto x = std::move(z);
+    //std::cout << (*x)[0] << std::endl;
+   //String a {"a"};
 
     //char* b_ptr = new char[1];
     //b_ptr[0] = 'b';

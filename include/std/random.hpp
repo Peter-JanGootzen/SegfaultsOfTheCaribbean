@@ -7,7 +7,7 @@ class Random {
 public:
     Random();
     ~Random() = default;
-    int getRandomInt(int min, int max);
+    int getRandomInt(int min, int max) noexcept;
     static Random& getInstance();
 private:
     std::random_device device;
