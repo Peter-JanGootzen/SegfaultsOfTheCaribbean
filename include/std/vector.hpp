@@ -44,7 +44,7 @@ public:
                 }
             }
             delete[] buffer;
-            this.buffer = other.buffer;
+            this->buffer = other.buffer;
             other.buffer = nullptr;
         }
         return *this;
