@@ -309,6 +309,8 @@ World "1" *-up- HarborController
 BattleController "1" *-right- SeaController  : Calls Battle() every moveShip with 20% chance
 SeaController"1" *-right- GameController
 HarborController "1" *-left- GameController
+WorldCreator -left- World
+WorldCreator -[hidden]> HarborController
 
 ' Controller > View relationships
 CLIViewController "1" *-down- GameController
@@ -319,5 +321,7 @@ CLIViewController "1" *-down- SeaController
 ' Standaard Bilbiotheek
 smart_ptr <|-down- unique_ptr
 smart_ptr <|-down- unique_array
+
+smart_ptr -[hidden]> Ship
 
 @enduml

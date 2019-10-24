@@ -33,7 +33,7 @@ void GameController::start() {
         }
         try {
             const String input_string = cliViewController->getInput();
-            const size_t input = std::stol(input_string.c_str());
+            const size_t input { static_cast<size_t>(std::stol(input_string.c_str())) };
             if(input < world->getHarbors().getSize()) {
                 world->getPlayer().getShip()->setDestination(world->getHarbors()[input]);
                 harborController->dockShip();
@@ -42,7 +42,7 @@ void GameController::start() {
                 input_failed = true;
             }
         }
-        catch(const std::invalid_argument&) {
+        catch(...) {
             input_failed = true;
         }
     } while(input_failed == true);
