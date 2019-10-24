@@ -23,3 +23,7 @@ add_executable(SegfaultsOfTheCaribbean
 )
 target_include_directories(SegfaultsOfTheCaribbean PUBLIC ../include)
 target_compile_features(SegfaultsOfTheCaribbean PUBLIC cxx_std_17)
+
+add_custom_command(TARGET SegfaultsOfTheCaribbean PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/data/ $<TARGET_FILE_DIR:SegfaultsOfTheCaribbean>/data)
