@@ -2,15 +2,16 @@
 #include "view_controllers/cli_view_controller.hpp"
 #include "std/string.hpp"
 #include <sstream>
+#include <iostream>
 
-HarborController::HarborController(World& w, CliViewController& cliViewController) : world(w), cliViewController(cliViewController) {
-}
+HarborController::HarborController(World& w, CliViewController& cliViewController)
+    : world(w), cliViewController(cliViewController) {}
 
 void HarborController::dockShip() {
     world.getPlayer().getShip()->dock();
 
     for (size_t i = 0; i < world.getHarbors().getSize(); i++) {
-        Harbor* h = world.getHarbors()[i];
+        Harbor* h { world.getHarbors()[i] };
         for (size_t o = 0; o < h->getGoodsForSale().getSize(); o++) {
             h->getGoodsForSale()[o]->randomizeAmount();
             h->getGoodsForSale()[o]->randomizePrice();
@@ -20,19 +21,19 @@ void HarborController::dockShip() {
 }
 
 void HarborController::tradeCannons() {
-    Player& p = world.getPlayer();
-    Ship* s = p.getShip();
-    Harbor* h = s->getCurrentHarbor();
+    Player& p { world.getPlayer() };
+    Ship* s { p.getShip() };
+    Harbor* h { s->getCurrentHarbor() };
 
-    int shipLightCannons = s->getCannons().count_filter([] (Cannon* c) -> bool {
+    const size_t shipLightCannons { s->getCannons().count_filter([] (const Cannon* c) -> bool {
         return c->getCannonType() == CannonType::Light;
-    });
-    int shipMediumCannons = s->getCannons().count_filter([] (Cannon* c) -> bool {
+    })};
+    const size_t shipMediumCannons { s->getCannons().count_filter([] (const Cannon* c) -> bool {
         return c->getCannonType() == CannonType::Medium;
-    });;
-    int shipHeavyCannons = s->getCannons().count_filter([] (Cannon* c) -> bool {
+    })};
+    const size_t shipHeavyCannons { s->getCannons().count_filter([] (const Cannon* c) -> bool {
         return c->getCannonType() == CannonType::Heavy;
-    });
+    })};
     cliViewController.writeOutput(String("YOUR SHIPS CANNONS"));
     cliViewController.writeOutput(String("Light cannons: ") << shipLightCannons << " , worth 25 gold each");
     cliViewController.writeOutput(String("Medium cannons: ") << shipMediumCannons << " , worth 100 gold each");
@@ -42,7 +43,7 @@ void HarborController::tradeCannons() {
     cliViewController.writeOutput(String("Medium cannons: ") << h->getMediumCannonStock() << " in stock, for 200 gold each");
     cliViewController.writeOutput(String("Heavy cannons: ") << h->getHeavyCannonStock() << " in stock, for 1000 gold each");
 
-    bool input_failed = false;
+    bool input_failed { false };
     do {
         if (input_failed == true) {
             cliViewController.writeOutput(String("The given input was incorrect!"));
@@ -51,10 +52,14 @@ void HarborController::tradeCannons() {
 
         try {
             cliViewController.writeOutput(String("Would you like to sell or buy?"));
-            const String input = cliViewController.getInput();
+            const String input { cliViewController.getInput() };
             if (input == String("buy")) {
+                if (s->getCannons().getSize() + 1 > s->getCannonCapacity()) {
+                    cliViewController.writeOutput(String("Your ship does not have enough room left for more cannons"));
+                    return;
+                }
                 cliViewController.writeOutput(String("Your options are: light, medium, heavy"));
-                const String input = cliViewController.getInput();
+                const String input { cliViewController.getInput() };
                 if (input == String("light")) {
                     if (h->getLightCannonStock() > 0 && p.getMoney() > 25) {
                         p.payMoney(50);
@@ -83,37 +88,31 @@ void HarborController::tradeCannons() {
                 }
             } else if (input == String("sell")) {
                 cliViewController.writeOutput(String("Your options are: light, medium, heavy"));
-                const String input = cliViewController.getInput();
+                const String input { cliViewController.getInput() };
                 if (input == String("light")) {
                     if (shipLightCannons > 0) {
                         p.receiveMoney(25);
-                        auto removed = s->getCannons().remove_filter([](Cannon* c) -> bool {
+                        unique_ptr<Cannon> removed { s->getCannons().remove_filter([](Cannon* c) -> bool {
                             return c->getCannonType() == CannonType::Light;
-                        });
-                        if (removed)
-                            delete removed;
+                        })};
                     } else
                         cliViewController.writeOutput(String("Couldn't sell the cannons"));
                 }
                 else if (input == String("medium")) {
                     if (shipMediumCannons > 0) {
                         p.receiveMoney(100);
-                        auto removed = s->getCannons().remove_filter([](Cannon* c) -> bool {
+                        unique_ptr<Cannon> removed { s->getCannons().remove_filter([](Cannon* c) -> bool {
                             return c->getCannonType() == CannonType::Medium;
-                        });
-                        if (removed)
-                            delete removed;
+                        })};
                     } else
                         cliViewController.writeOutput(String("Couldn't sell the cannons"));
                 }
                 else if (input == String("heavy")) {
                     if (shipHeavyCannons > 0) {
                         p.receiveMoney(500);
-                        auto removed = s->getCannons().remove_filter([](Cannon* c) -> bool {
+                        unique_ptr<Cannon> removed { s->getCannons().remove_filter([](Cannon* c) -> bool {
                             return c->getCannonType() == CannonType::Heavy;
-                        });
-                        if (removed)
-                            delete removed;
+                        })};
                     } else
                         cliViewController.writeOutput(String("Couldn't sell the cannons"));
                 } else {
@@ -129,16 +128,16 @@ void HarborController::tradeCannons() {
 }
 
 void HarborController::tradeGoods() {
-    Player& p = world.getPlayer();
-    Ship* s = p.getShip();
-    Harbor* h = s->getCurrentHarbor();
+    Player& p { world.getPlayer() };
+    Ship* s { p.getShip() };
+    Harbor* h { s->getCurrentHarbor() };
 
     for (size_t i = 0; i < h->getGoodsForSale().getSize(); i++) {
-        const Good* g = h->getGoodsForSale().get(i);
+        const Good* g { h->getGoodsForSale().get(i) };
         cliViewController.writeOutput(g->getName() << ": " << g->getAmount() << "x, for: " << g->getPrice() << " each");
     }
 
-    bool input_failed = false;
+    bool input_failed { false };
     do {
         if (input_failed == true) {
             cliViewController.writeOutput(String("The given input was incorrect!"));
@@ -147,23 +146,31 @@ void HarborController::tradeGoods() {
 
         try {
             cliViewController.writeOutput(String("Would you like to sell or buy?"));
+            if (s->getCargoAmount() + 1 > s->getCargoSpace()) {
+                cliViewController.writeOutput(String("You do not have enough room left for more cargo"));
+                return;
+            }
             const String input = cliViewController.getInput();
             if (input == String("buy")) {
                 cliViewController.writeOutput(String("Enter the name of the good you want to purchase"));
-                const String input = cliViewController.getInput();
-                Good* toBuyGood = h->getGoodsForSale().get_filter([input](Good* g) -> bool {
+                const String input { cliViewController.getInput() };
+                Good* toBuyGood { h->getGoodsForSale().get_filter([input](const Good* g) -> bool {
                     return g->getName() == input;
-                });
+                })};
                 if (toBuyGood == nullptr) {
                     input_failed = true;
                 } else {
                     cliViewController.writeOutput(String("Enter the amount you would like to purchase"));
                     try {
-                        const int amountToBuy = std::stoi(cliViewController.getInput().c_str());
-                        int moneyToSpend = amountToBuy * toBuyGood->getPrice();
+                        const int amountToBuy { std::stoi(cliViewController.getInput().c_str()) };
+                        if (s->getCargoAmount() + amountToBuy > s->getCargoSpace()) {
+                            cliViewController.writeOutput(String("You do not have enough room left for this much cargo"));
+                            return;
+                        }
+                        const int moneyToSpend { amountToBuy * toBuyGood->getPrice() };
                         if(amountToBuy > 0 && amountToBuy <= toBuyGood->getAmount()) {
                             if (p.getMoney() - moneyToSpend > 0) {
-                                Good* cargoGood = s->getCargo().get_filter([toBuyGood](Good* g) -> bool {
+                                Good* cargoGood = s->getCargo().get_filter([toBuyGood](const Good* g) -> bool {
                                     return g->getName() == toBuyGood->getName();
                                 });
                                 if (cargoGood == nullptr) {
@@ -186,13 +193,13 @@ void HarborController::tradeGoods() {
                 }
             } else if (input == String("sell")) {
                 cliViewController.writeOutput(String("Enter the name of the good you want to sell"));
-                const String input = cliViewController.getInput();
-                Good* toSellGood = s->getCargo().get_filter([input](Good* g) -> bool {
+                const String input { cliViewController.getInput() };
+                Good* toSellGood { s->getCargo().get_filter([input](const Good* g) -> bool {
                     return g->getName() == input;
-                });
-                Good* toSellGoodHarbor = h->getGoodsForSale().get_filter([input](Good* g) -> bool {
+                })};
+                Good* toSellGoodHarbor { h->getGoodsForSale().get_filter([input](const Good* g) -> bool {
                     return g->getName() == input;
-                });
+                })};
                 if (toSellGood == nullptr) {
                     cliViewController.writeOutput(String("You do not own this good"));
                     input_failed = true;
@@ -203,14 +210,14 @@ void HarborController::tradeGoods() {
                     }
                     cliViewController.writeOutput(String("Enter the amount you would like to sell"));
                     try {
-                        const int amountToSell = std::stoi(cliViewController.getInput().c_str());
-                        int moneyToReceive = amountToSell * (toSellGoodHarbor->getPrice() / 2);
+                        const int amountToSell { std::stoi(cliViewController.getInput().c_str()) };
+                        int moneyToReceive { amountToSell * toSellGoodHarbor->getPrice() };
                         if(amountToSell > 0 && amountToSell <= toSellGood->getAmount()) {
                             p.receiveMoney(moneyToReceive);
                             toSellGoodHarbor->setAmount(toSellGoodHarbor->getAmount() + amountToSell);
                             toSellGood->setAmount(toSellGood->getAmount() - amountToSell);
                             if (toSellGood->getAmount() <= 0)
-                                s->getCargo().remove(toSellGood);
+                                unique_ptr<Good> soldGood = s->getCargo().remove(toSellGood);
                         } else {
                             input_failed = true;
                         }
@@ -229,9 +236,9 @@ void HarborController::tradeGoods() {
 }
 
 void HarborController::buyShip() {
-    Player& player = world.getPlayer();
-    Ship* ship = player.getShip();
-    Harbor* harbor = ship->getCurrentHarbor();
+    Player& player { world.getPlayer() };
+    Ship* ship { player.getShip() };
+    Harbor* harbor { ship->getCurrentHarbor() };
 
     cliViewController.writeOutput(String("These ships are for sale:"));
     for(size_t i = 0; i < harbor->getShipsForSale().getSize(); i++) {
@@ -241,7 +248,7 @@ void HarborController::buyShip() {
     try {
         const size_t input = std::stol(cliViewController.getInput().c_str());
         if(input < harbor->getShipsForSale().getSize()) {
-            auto shipToBuy = harbor->getShipsForSale().get(input);
+            auto shipToBuy { harbor->getShipsForSale().get(input) };
             if (player.getMoney() - shipToBuy->getPrice() + (player.getShip()->getPrice() / 2) < 0) {
                 cliViewController.writeOutput(String("You do not have enough money to buy this ship"));
                 return;
@@ -255,16 +262,18 @@ void HarborController::buyShip() {
                 return;
             }
 
-            auto boughtShip = harbor->getShipsForSale().remove_index(input);
-            Ship* oldShip = player.setShip(boughtShip);
+            auto boughtShip { harbor->getShipsForSale().remove_index(input) };
+            Ship* oldShip { player.setShip(boughtShip).release() };
             oldShip->setDestination(nullptr);
             oldShip->setCurrentHarbor(nullptr);
             oldShip->setHealth(oldShip->getMaxHealth());
-            for (size_t i = 0; i < oldShip->getCargo().getSize(); i++) {
-                boughtShip->getCargo().append(oldShip->getCargo().remove_index(i));
+            size_t cargoSize = oldShip->getCargo().getSize();
+            for (size_t i = 0; i < cargoSize; i++) {
+                boughtShip->getCargo().append(oldShip->getCargo().remove_index(0));
             }
-            for (size_t i = 0; i < oldShip->getCannons().getSize(); i++) {
-                boughtShip->getCannons().append(oldShip->getCannons().remove_index(i));
+            size_t cannonsSize = oldShip->getCannons().getSize();
+            for (size_t i = 0; i < cannonsSize; i++) {
+                boughtShip->getCannons().append(oldShip->getCannons().remove_index(0));
             }
             player.payMoney(boughtShip->getPrice());
             player.receiveMoney(oldShip->getPrice() / 2);
@@ -296,9 +305,9 @@ void HarborController::repairShip() {
 }
 
 void HarborController::setSail() {
-    const Player& player = world.getPlayer();
-    Ship* ship = player.getShip();
-    bool input_failed = false;
+    const Player& player { world.getPlayer() };
+    Ship* ship { player.getShip() };
+    bool input_failed { false };
     do {
         if (input_failed == true) {
             cliViewController.writeOutput(String("The given input was incorrect!"));
@@ -329,11 +338,11 @@ void HarborController::setSail() {
 }
 
 bool HarborController::presentOptions() {
-    const Player* player = &world.getPlayer();
-    const Ship* ship = player->getShip();
+    const Player* player { &world.getPlayer() };
+    const Ship* ship { player->getShip() };
     cliViewController.writeOutput(String() << "You are currently in: " << ship->getCurrentHarbor()->getName());
 
-    bool input_failed = false;
+    bool input_failed { false };
     do {
         if (input_failed == true) {
             cliViewController.writeOutput(String("The given input was incorrect!"));
@@ -352,7 +361,7 @@ bool HarborController::presentOptions() {
 
         cliViewController.writeOutput(String("Your options are:"));
         cliViewController.writeOutput(String("trade_cannons, trade_goods, buy_ship, set_sail, repair, quit"));
-        const String input = cliViewController.getInput();
+        const String input { cliViewController.getInput() };
         if (input == String("trade_cannons")) {
             tradeCannons();
         } else if (input == String("trade_goods")) {

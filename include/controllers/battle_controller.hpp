@@ -8,17 +8,17 @@
 
 class BattleController {
 public:
-	BattleController(World& w, CliViewController& cliViewController);
-	void battle(Ship* s);
+    BattleController(World& w, CliViewController& cliViewController);
+    void battle(Ship* s);
 private:
-	unique_ptr<Ship> spawnPirateShip();
-	String presentOptions(); 
-	void shoot(Ship& s, Ship& priateShip);
-	bool flee(Ship& s, Ship& pirateShip);
-	void surrender(Ship& s, Ship& pirateShip);
-	int calculateDamage(Ship& s);
-	World& world;
-	CliViewController& cliViewController;
+    unique_ptr<Ship> spawnPirateShip();
+    String presentOptions(); 
+    void shoot(Ship& s, Ship& priateShip);
+    bool flee(Ship& s, Ship& pirateShip);
+    void surrender(Ship& s, Ship& pirateShip);
+    int calculateDamage(Ship& s);
+    World& world;
+    CliViewController& cliViewController;
 };
 
 #endif

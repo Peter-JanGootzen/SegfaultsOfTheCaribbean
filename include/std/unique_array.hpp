@@ -6,8 +6,8 @@
 template<typename T>
 class unique_array : public smart_ptr<T> {
 public:
-    unique_array() : smart_ptr<T>(nullptr) {}
-    unique_array(T* t) : smart_ptr<T>(t) {}
+    unique_array() noexcept : smart_ptr<T>(nullptr) {}
+    unique_array(T* t) noexcept : smart_ptr<T>(t) {}
     ~unique_array() {
         if (this->t)
             delete[] this->t;
@@ -17,7 +17,7 @@ public:
     // copy assignment operator, should not kill the other value
     unique_array<T>& operator=(const unique_array<T>& other) = delete;
     // move constructor, should kill the other value
-    unique_array(unique_array<T>&& other) {
+    unique_array(unique_array<T>&& other) noexcept {
         this->t = other.t;
         other.t = nullptr;
     }

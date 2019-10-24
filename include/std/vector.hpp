@@ -10,10 +10,8 @@ public:
         this->buffer = new T[n];
         std::copy_n(buffer, n, this->buffer);
     };
-    Vector(bool valuesAreOwned) : valuesAreOwned(valuesAreOwned) {
-        size = 0;
-        buffer = nullptr;
-    };
+    Vector(bool valuesAreOwned) noexcept
+        : buffer(nullptr), size(0), valuesAreOwned(valuesAreOwned)  {}
     ~Vector() {
         if (valuesAreOwned) {
             for (size_t i = 0; i < size; i++) {
@@ -27,7 +25,7 @@ public:
     // copy assignment operator, should not kill the other value
     Vector& operator=(const Vector& other) = delete;
     // move constructor, should kill the other value
-    Vector(Vector&& other) {
+    Vector(Vector&& other) noexcept {
         size = other.size;
 
         buffer = other.buffer;
@@ -50,11 +48,11 @@ public:
         return *this;
     }
     T& operator[](size_t i) const {
-        if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
+        if (i >= size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
     T& get(size_t i) const {
-        if (i > size || !buffer) throw std::out_of_range("Please supply a valid range");
+        if (i >= size || !buffer) throw std::out_of_range("Please supply a valid range");
         return buffer[i];
     }
     T get_filter(std::function<bool (T)> filter) const {
@@ -66,7 +64,7 @@ public:
         return nullptr;
     }
     void append(T v) {
-        auto newBuffer = new T[size + 1];
+        auto newBuffer { new T[size + 1] };
         if (buffer) {
             std::copy_n(buffer, size, newBuffer);
             delete[] buffer;
@@ -77,10 +75,10 @@ public:
     }
     // By index
     T remove_index(size_t index) {
-        if (index > size || !buffer) throw std::out_of_range("Please supply a valid range");
-        T e = buffer[index];
+        if (index >= size || !buffer) throw std::out_of_range("Please supply a valid range");
+        T e { buffer[index] };
 
-        auto newBuffer = new T[size - 1];
+        auto newBuffer { new T[size - 1] };
         std::copy_n(buffer, index, newBuffer);
         std::copy_n(buffer + index + 1, size - index - 1, newBuffer + index);
         delete[] buffer;
@@ -89,29 +87,29 @@ public:
         return e;
     }
     // Searches
-    T remove(T v) {
+    T remove(T v) noexcept {
         for (size_t i = 0; i < size; i++) {
             if (buffer[i] == v)
                 return remove_index(i);
         }
         return nullptr;
     }
-    T remove_filter(std::function<bool (T)> filter) {
+    T remove_filter(std::function<bool (const T)> filter) {
         for (size_t i = 0; i < size; i++) {
             if (filter(buffer[i]))
                 return remove_index(i);
         }
         return nullptr;
     }
-    bool has_filter(std::function<bool (T)> filter) const {
+    bool has_filter(std::function<bool (const T)> filter) const {
         for (size_t i = 0; i < size; i++) {
             if (filter(buffer[i]))
                 return true;
         }
         return false;
     }
-    size_t count_filter(std::function<int  (T)> filter) {
-        size_t total = 0;
+    size_t count_filter(std::function<int  (const T)> filter) const {
+        size_t total { 0 };
         for (size_t i = 0; i < size; i++) {
             if (filter(buffer[i])) {
                 total++;
@@ -119,10 +117,10 @@ public:
         }
         return total;
     }
-    size_t getSize() const {
+    size_t getSize() const noexcept {
         return size;
     }
-    bool empty() const {
+    bool empty() const noexcept {
         return size == 0;
     }
     // todo rule of five

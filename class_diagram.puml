@@ -4,41 +4,140 @@ title Segfaults of the Caribbean - Class Diagram
 ' Model layer
 package Models {
     class Player {
-        +int Money
+        -int money
+
+        Player() noexcept
+        Player(Player&& other) = delete
+        Player(const Player& other) = delete;
+        Player& operator=(Player&& other) = delete
+        Player& operator=(const Player& other) = delete;
+
+        unique_ptr<Ship> setShip(unique_ptr<Ship> ship) noexcept
+        Ship* getShip() const noexcept
+        int getMoney() const noexcept
+        void payMoney(int amount) noexcept
+        void receiveMoney(int amount) noexcept
     }
     class Ship {
-        +int CargoSpace
-        +int CannonCapacity
-        +int Price
-        +int Health
-        +int DestinationDistance
+        -String name
+        -int price
+        -size_t cargoSpace
+        -size_t cannonCapacity
+        -int maxHealth
+        -int health
+        -int destinationDistance
+        -ShipWeight weight
+        -ShipSize size
+
+        +Ship(String name, int price, int maxHealth, int cargoSpace,
+              int cannonCapacity, ShipWeight weight, ShipSize size)
+        +Ship(Ship&& other) = delete
+        +Ship(const Ship& other) = delete
+        +Ship& operator=(Ship&& other) = delete
+        +Ship& operator=(const Ship& other) = delete
+
+        +String getName() const noexcept
+        +int getHealth() const noexcept
+        +int getMaxHealth() const noexcept
+        +int getPrice() const noexcept
+        +size_t getCargoSpace() const noexcept
+        +size_t getCannonCapacity() const noexcept
+        +int getDestinationDistance() const noexcept
+        +Vector<Cannon*>& getCannons() const
+        +ShipWeight getShipWeight() const noexcept
+        +ShipSize getShipSize() const noexcept
+        +Harbor* getCurrentHarbor() const noexcept
+        +Harbor* getDestination() const noexcept
+        +Vector<Good*>& getCargo() const
+        +size_t getCargoAmount() const
+        +bool isSunken() const noexcept
+        +bool isDocked() const noexcept
+        +void setName(String name) noexcept
+        +void setHealth(int health) noexcept
+        +void setDestinationDistance(int destinationDistance) noexcept
+        +void setCurrentHarbor(Harbor* const harbor) noexcept
+        +void setDestination(Harbor* const destination) noexcept
+        +void setShipWeight(ShipWeight weight) noexcept
+        +void setShipSize(ShipSize size) noexcept
+        +void addCannon(Cannon* cannon)
+        +void applyDamage(int damage) noexcept
+        +void sail(int distance) noexcept
+        +void dock() noexcept
+        +void repair(int amount) noexcept
     }
-    class Cannon
+    class Cannon {
+        +Cannon(CannonType type) noexcept
+        +CannonType getCannonType() const noexcept
+    }
     enum CannonType {
         Light
         Medium
         Heavy
     }
-    class World
+    class World {
+        +World(unique_ptr<Player> player, unique_ptr<Vector<Harbor*>> harbors,
+               unique_ptr<Vector<HarborDistance*>> harborDistances) noexcept
+        +World(World&& other) = delete
+        +World(const World& other) = delete
+        +World& operator=(World&& other) = delete
+        +World& operator=(const World& other) = delete
+
+        +Player& getPlayer() const
+        +Vector<HarborDistance*>& getHarborDistances() const
+        +Vector<Harbor*>& getHarbors() const
+    }
     class Harbor {
-        +string Name
+        -String name
+        -int lightCannonStock
+        -int mediumCannonStock
+        -int heavyCannonStock
+
+        +Harbor(Harbor&& other) = delete
+        +Harbor(const Harbor& other) = delete
+        +Harbor& operator=(Harbor&& other) = delete
+        +Harbor& operator=(const Harbor& other) = delete
+        +Harbor(String name)
+        +Harbor(String name, unique_ptrVector<Ship*>> shipsForSale,
+                unique_ptr<Vector<Good*>> goodsForSale) noexcept
+
+        +String getName() const noexcept
+        +Vector<Good*>& getGoodsForSale() const
+        +Vector<Ship*>& getShipsForSale() const
+        +int getLightCannonStock() const noexcept
+        +int getMediumCannonStock() const noexcept
+        +int getHeavyCannonStock() const noexcept
+        +void setLightCannonStock(int amount) noexcept
+        +void setMediumCannonStock(int amount) noexcept
+        +void setHeavyCannonStock(int amount)
+        +void randomizeCannonStock()
     }
     class HarborDistance {
-        +int distance
+        -int distance
+        +HarborDistance(Harbor* from, Harbor* to, int distance)
+
+        +Harbor* getFrom() const noexcept
+        +Harbor* getTo() const noexcept
+        +int getDistance() const noexcept
     }
     class Good {
-        +string name
+        -String name
         -int minPrice
         -int maxPrice
         -int currentPrice
         -int minAmount
         -int maxAmount
         -int currentAmount
-        +int getPrice()
+
+        +Good(String name, int minPrice, int maxPrice, int minAmount, int maxAmount)
+        +Good(String name, int currentAmount)
+
+        +int getPrice() const noexcept
+        +String getName() const noexcept
         +void randomizePrice()
-        +int getAmount()
+        +int getAmount() const noexcept
+        +void setAmount(int amount) noexcept
         +void randomizeAmount()
-    }
+   }
     enum ShipWeight {
         Light
         Heavy
@@ -52,18 +151,33 @@ package Models {
 ' Controller layer
 package Controllers {  
     class HarborController {
-        +void buyGoods(Player p, string[] args)
-        +void buyCannons(Player p, string[] args)
-        +void buyShip(Player p, string[] args)
+        -void tradeCannons()
+        -void tradeGoods()
+        -void buyShip()
+        -void repairShip()
+        -void setSail()
+        +HarborController(World& w, CliViewController& cliViewController)
+        +void dockShip()
+        +bool presentOptions()
     }
-    note left of HarborController: The arguments for buy* member functions are TBD
     class BattleController {
-        +void battle()
+        -unique_ptr<Ship> spawnPirateShip()
+        -String presentOptions()
+        -void shoot(Ship& s, Ship& priateShip)
+        -bool flee(Ship& s, Ship& pirateShip)
+        -void surrender(Ship& s, Ship& pirateShip)
+        -int calculateDamage(Ship& s)
+        +BattleController(World& w, CliViewController& cliViewController)
+        +void battle(Ship* s)
     }
     class SeaController {
-        +void moveShip(Ship s)
+        +SeaController(World& w, CliViewController& cliViewController)
+        +bool sail()
+        +void move()
     }
     class GameController {
+        +GameController(unique_ptr<World> w);
+        +void start()
         +void gameLoop()
     }
 }
@@ -71,50 +185,139 @@ package Controllers {
 ' View layer
 package ViewControllers {
     class CLIViewController {
-        +string GetInput()
+        +CliViewController() = default
+        +void writeOutput(String s) const
+        +String getInput() const
     }
 }
 
-' std layer
-package std {
+' Standaard Bibliotheek
+package Standaard_Bibliotheek {
     class Random {
-
+        -std::random_device device;
+        -std::default_random_engine dre;
+        +Random()
+        +Random& getInstance()
+        +int getRandomInt(int min, int max)
     }
     class String {
-        
+        -size_t n
+        -char* a
+        +String()
+        +String(const char* buffer)
+        +String(size_t size, const char* buffer)
+        +String(const String& other)
+        +String(String&& other)
+        +String& operator=(String&& other)
+        +String& operator=(const String& other)
+        +String operator+(const String& s)
+        +char& operator[](size_t i) const
+        +bool operator==(const String& s) const noexcept
+        +friend std::ostream& operator<<(std::ostream& os, const String& s)
+        +friend String operator<<(const String& r, const String& s)
+        +friend String operator<<(const String& s, int i)
+        +void append(char x)
+        +size_t size() const
+        +char* c_str() const
+        +String substr(size_t from, size_t to)
+        +size_t find(char delim)
     }
-    class Vector {
+    class Vector<T> {
+        -T* buffer
+        -size_t size
+        -bool valuesAreOwned
+        +Vector(T* buffer, size_t n, bool valuesAreOwned)
+        +Vector(bool valuesAreOwned)
+        +Vector(const Vector& other) = delete;
+        +Vector& operator=(const Vector& other) = delete;
+        +Vector(Vector&& other)
+        +Vector& operator=(Vector&& other)
+        +T& operator[](size_t i) const
+        +T& get(size_t i) const
+        +T get_filter(std::function<bool (T)> filter) const
+        +void append(T v)
+        +T remove_index(size_t index)
+        +T remove(T v)
+        +T remove_filter(std::function<bool (T)> filter)
+        +bool has_filter(std::function<bool (T)> filter) const
+        +size_t count_filter(std::function<int  (T)> filter)
+        +size_t getSize() const
+        +bool empty() const
+    }
+    class smart_ptr<T> {
+        #T* t
+        +smart_ptr() : t(nullptr)
+        +smart_ptr(T* t) : t(t)
+        +bool operator==(T* t)
+        +bool operator!=(T* t)
+        +T* operator->()
+        +T& operator*()
+        +explicit operator bool() const noexcept
+        +T* get()
+        +T* release() noexcept
+    }
+    class unique_array<T> {
+        +unique_array() : smart_ptr<T>(nullptr)
+        +unique_array(T* t) : smart_ptr<T>(t)
+        +unique_array(const unique_array<T>& other) = delete
+        +unique_array<T>& operator=(const unique_array<T>& other) = delete
+        +unique_array(unique_array<T>&& other)
+        +unique_array<T>& operator=(unique_array<T>&& other)
+    }
+    class unique_ptr<T> {
+        unique_ptr() : smart_ptr<T>(nullptr)
+        unique_ptr(T* t) : smart_ptr<T>(t)
+        unique_ptr(const unique_ptr<T>& other) = delete
+        unique_ptr<T>& operator=(const unique_ptr<T>& other) = delete
+        unique_ptr(unique_ptr<T>&& other)
+        unique_ptr<T>& operator=(unique_ptr<T>&& other)
+    }
+}
 
+package Creation {
+    class WorldCreator {
+        +unique_ptr<World> createWorld()
     }
 }
 
 ' Relationships
 ' Model > Model relationships
-ShipSize "1" *-right- Ship
-ShipWeight "1" *-right- Ship
-Cannon "*" *-up- "1" Ship
-Ship "1" *-right- "1" Player
+ShipSize "1" *-right- Ship : Size
+ShipWeight "1" *-right- Ship : Weight
+Cannon "*" *-up- "1" Ship : Cannons
+Ship "1" *-right- "1" Player : Ship
 Ship "*" *-right- "1" Harbor : For sale
-CannonType "1" *-up- Cannon
+CannonType "1" *-up- Cannon : Type
 Good "*" *-up- "1" Harbor : For sale
-Good "*" *-up- "1" Ship
-Player "1" *-right- "1" World
-Harbor "*" *-up- "1" World
-HarborDistance "*" *-left- "1" World
+Good "*" *-up- "1" Ship : Cargo
+Player "1" *-right- "1" World : Player
+Harbor "*" *-up- "1" World : Harbors
+HarborDistance "*" *-left- "1" World : Distances
 Harbor "1" *-down- "1" Ship : Destination
-Harbor "1" *-down- "1" Ship : DockedShip
+Harbor "1" -down-* "1" Ship : DockedShip
+Harbor "1" *-down- "1" Ship : CurrentHarbor
 Harbor "1" *-down- "*" HarborDistance : From
 Harbor "1" *-down- "*" HarborDistance : To
 
 ' Model > Controller relationships
-World "1" *-up- "1" GameController
+World "1" *-up- GameController
+World "1" *-up- SeaController
+World "1" *-up- BattleController
+World "1" *-up- HarborController
 
 ' Controller > Controller relationships
-SeaController -right- BattleController : Calls Battle() every moveShip with 20% chance
-SeaController -left- GameController
-HarborController -right- GameController
+BattleController "1" *-right- SeaController  : Calls Battle() every moveShip with 20% chance
+SeaController"1" *-right- GameController
+HarborController "1" *-left- GameController
 
 ' Controller > View relationships
-CLIViewController -down- GameController
+CLIViewController "1" *-down- GameController
+CLIViewController "1" *-down- BattleController
+CLIViewController "1" *-down- HarborController
+CLIViewController "1" *-down- SeaController
+
+' Standaard Bilbiotheek
+smart_ptr <|-down- unique_ptr
+smart_ptr <|-down- unique_array
 
 @enduml

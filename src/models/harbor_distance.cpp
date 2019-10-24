@@ -1,18 +1,14 @@
 #include "models/harbor_distance.hpp"
 
-HarborDistance::HarborDistance() {
-    this->from = nullptr;
-    this->to = nullptr;
-}
-HarborDistance::HarborDistance(Harbor* from, Harbor* to, int distance) :
+HarborDistance::HarborDistance(Harbor* from, Harbor* to, int distance) noexcept :
     from(from), to(to), distance(distance) {}
 
-Harbor* HarborDistance::getFrom() const {
+Harbor* HarborDistance::getFrom() const noexcept {
     return this->from;
 }
-Harbor* HarborDistance::getTo() const {
+Harbor* HarborDistance::getTo() const noexcept {
     return this->to;
 }
-int HarborDistance::getDistance() const {
+int HarborDistance::getDistance() const noexcept {
     return distance;
 }

@@ -6,17 +6,16 @@
 // This class is not the owner of it's heap data, so no destructor needed
 class HarborDistance {
 public:
-    HarborDistance();
-    HarborDistance(Harbor* from, Harbor* to, int distance);
-    // This is a pointer because it will get used in the player, which needs a ptr
-    Harbor* getFrom() const;
-    // This is a pointer because it will get used in the player, which needs a ptr
-    Harbor* getTo() const;
-    int getDistance() const;
+	HarborDistance(Harbor* from, Harbor* to, int distance) noexcept;
+	// This is a pointer because it will get used in the player, which needs a ptr
+	Harbor* getFrom() const noexcept;
+	// This is a pointer because it will get used in the player, which needs a ptr
+	Harbor* getTo() const noexcept;
+	int getDistance() const noexcept;
 private:
-    Harbor* from;
-    Harbor* to;
-    int distance;
+	Harbor* from;
+	Harbor* to;
+	int distance;
 };
 
 #endif

@@ -9,88 +9,25 @@ Ship::Ship(String name, int price, int maxHealth, int cargoSpace,
            cannonCapacity(cannonCapacity),
            maxHealth(maxHealth),
            weight(weight), size(size) {
-    this->cargo = new Vector<Good*>(true);
-    this->cannons = new Vector<Cannon*>(true);
+    this->cargo = unique_ptr<Vector<Good*>>(new Vector<Good*>(true));
+    this->cannons = unique_ptr<Vector<Cannon*>>(new Vector<Cannon*>(true));
     this->currentHarbor = nullptr;
     this->health = maxHealth;
 }
 
-Ship::Ship() {
-    this->cargo = new Vector<Good*>(true);
-    this->currentHarbor = nullptr;
-}
-
-Ship::Ship(Ship&& other) {
-    // stack
-    this->name = other.name;
-    this->price = other.price;
-    this->cargoSpace = other.cargoSpace;
-    this->cannonCapacity = other.cannonCapacity;
-    this->health = other.health;
-    this->destinationDistance = other.destinationDistance;
-    this->weight = other.weight;
-    this->size = other.size;
-
-    // heap
-    this->destination = other.destination;
-    other.destination = nullptr;
-    this->currentHarbor = other.currentHarbor;
-    other.currentHarbor = nullptr;
-    this->cargo = other.cargo;
-    other.cargo = nullptr;
-    this->cannons = other.cannons;
-    other.cannons = nullptr;
-}
- 
-Ship& Ship::operator=(Ship&& other) {
-    if(this != &other) {
-        // stack
-        this->name = other.name;
-        this->price = other.price;
-        this->cargoSpace = other.cargoSpace;
-        this->cannonCapacity = other.cannonCapacity;
-        this->health = other.health;
-        this->destinationDistance = other.destinationDistance;
-        this->weight = other.weight;
-        this->size = other.size;
-
-        // heap
-        this->destination = other.destination;
-        other.destination = nullptr;
-        this->currentHarbor = other.currentHarbor;
-        other.currentHarbor = nullptr;
-        if (this->cargo != nullptr)
-            delete this->cargo;
-        this->cargo = other.cargo;
-        other.cargo = nullptr;
-        if (this->cannons != nullptr)
-            delete this->cannons;
-        this->cannons = other.cannons;
-        other.cannons = nullptr;
-    }
-    return *this;
-}
-
-Ship::~Ship() {
-    if (this->cargo != nullptr)
-        delete this->cargo;
-    if (this->cannons != nullptr)
-        delete this->cannons;
-}
-
-ShipWeight Ship::getShipWeight() const {
+ShipWeight Ship::getShipWeight() const noexcept {
     return this->weight;
 }
-ShipSize Ship::getShipSize() const {
+ShipSize Ship::getShipSize() const noexcept {
     return this->size;
 }
 Vector<Cannon*>& Ship::getCannons() const {
     return *this->cannons;
 }
-void Ship::applyDamage(int damage) {
+void Ship::applyDamage(int damage) noexcept {
     this->health -= damage;
 }
-void Ship::repair(int amount) {
+void Ship::repair(int amount) noexcept {
     if (this->health + amount >= this->maxHealth)
         this->health = maxHealth;
     else
@@ -101,32 +38,32 @@ void Ship::addCannon(Cannon* cannon) {
     this->cannons->append(cannon);
 }
 
-bool Ship::isSunken() const {
+bool Ship::isSunken() const noexcept {
     return this->health <= 0;
 }
 
-bool Ship::isDocked() const {
+bool Ship::isDocked() const noexcept {
     return this->currentHarbor != nullptr;
 }
 
-void Ship::sail(int distance) {
+void Ship::sail(int distance) noexcept {
     this->destinationDistance -= distance;
 }
 
-void Ship::dock() {
+void Ship::dock() noexcept {
     this->destinationDistance = 0;
     this->currentHarbor = this->destination;
 }
 
-String Ship::getName() const {
+String Ship::getName() const noexcept {
     return this->name;
 }
 
-Harbor* Ship::getCurrentHarbor() const {
+Harbor* Ship::getCurrentHarbor() const noexcept {
     return this->currentHarbor;
 }
 
-Harbor* Ship::getDestination() const {
+Harbor* Ship::getDestination() const noexcept {
     return this->destination;
 }
 
@@ -134,52 +71,51 @@ Vector<Good*>& Ship::getCargo() const {
     return *this->cargo;
 }
 
-int Ship::getDestinationDistance() const {
+int Ship::getDestinationDistance() const noexcept {
     return this->destinationDistance;
 }
 
-void Ship::setDestination(Harbor* destination) {
+void Ship::setDestination(Harbor* destination) noexcept {
     this->destination = destination;
 }
-void Ship::setCurrentHarbor(Harbor* harbor) {
+void Ship::setCurrentHarbor(Harbor* harbor) noexcept {
     this->currentHarbor = harbor;
 }
 
-void Ship::setDestinationDistance(int destinationDistance) {
+void Ship::setDestinationDistance(int destinationDistance) noexcept {
     this->destinationDistance = destinationDistance;
 }
 
-void Ship::setHealth(int health) {
+void Ship::setHealth(int health) noexcept {
     if (this->health + health > this->maxHealth)
         this->health = maxHealth;
     this->health += health;
 }
 
 size_t Ship::getCargoAmount() const {
-    size_t total = 0;
+    size_t total { 0 };
     for (size_t i = 0; i < cargo->getSize(); i++) {
         total += cargo->get(i)->getAmount();
     }
     return total;
 }
 
-int Ship::getHealth() const {
+int Ship::getHealth() const noexcept {
     return this->health;
 }
 
-int Ship::getMaxHealth() const {
+int Ship::getMaxHealth() const noexcept {
     return this->maxHealth;
 }
 
-size_t Ship::getCargoSpace() const {
+size_t Ship::getCargoSpace() const noexcept {
     return this->cargoSpace;
 }
 
-int Ship::getPrice() const {
+int Ship::getPrice() const noexcept {
     return this->price;
 }
 
-size_t Ship::getCannonCapacity() const {
+size_t Ship::getCannonCapacity() const noexcept {
     return this->cannonCapacity;
 }
-

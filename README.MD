@@ -15,5 +15,8 @@
 - `cmake ..`
 - `make`
 
+## Diagram
+![Diagram](./class_diagram.png)
+
 Raise the sails!
 - `./SegfaultsOfTheCarribean`

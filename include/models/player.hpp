@@ -5,21 +5,21 @@
 
 class Player {
 public:
-    Player();
-    Player(Player&& other);
+    Player() noexcept;
+    Player(Player&& other) = delete;
     Player(const Player& other) = delete;
-    Player& operator=(Player&& other);
+    Player& operator=(Player&& other) = delete;
     Player& operator=(const Player& other) = delete;
-    ~Player();
+    ~Player() = default;
     // This returns the old ship so it can be sold.
-    Ship* setShip(Ship* ship);
+    unique_ptr<Ship> setShip(unique_ptr<Ship> ship) noexcept;
     // This returns a ptr because there can be no ship, so it should be able to return nullptr
-    Ship* getShip() const;
-    int getMoney() const;
-    void payMoney(int amount);
-    void receiveMoney(int amount);
+    Ship* getShip() const noexcept;
+    int getMoney() const noexcept;
+    void payMoney(int amount) noexcept;
+    void receiveMoney(int amount) noexcept;
 private:
-    Ship* ship;
+    unique_ptr<Ship> ship;
     int money;
 };
 

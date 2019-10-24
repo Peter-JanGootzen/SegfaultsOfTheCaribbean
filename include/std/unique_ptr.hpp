@@ -6,7 +6,7 @@
 template<typename T>
 class unique_ptr : public smart_ptr<T> {
 public:
-    unique_ptr() : smart_ptr<T>(nullptr) {}
+    unique_ptr() noexcept : smart_ptr<T>(nullptr) {}
     unique_ptr(T* t) : smart_ptr<T>(t) {}
     ~unique_ptr() {
         if (this->t)
@@ -17,7 +17,7 @@ public:
     // copy assignment operator, should not kill the other value
     unique_ptr<T>& operator=(const unique_ptr<T>& other) = delete;
     // move constructor, should kill the other value
-    unique_ptr(unique_ptr<T>&& other) {
+    unique_ptr(unique_ptr<T>&& other) noexcept {
         this->t = other.t;
         other.t = nullptr;
     }

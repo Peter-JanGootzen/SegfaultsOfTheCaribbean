@@ -1,50 +1,28 @@
 #include "models/player.hpp"
 
-int Player::getMoney() const {
+int Player::getMoney() const noexcept {
     return this->money;
 }
 
-Ship* Player::getShip() const {
-    return this->ship;
+Ship* Player::getShip() const noexcept {
+    return this->ship.get();
 }
 
-Ship* Player::setShip(Ship* other) {
-    Ship* oldShip = this->ship;
-    this->ship = other;
+unique_ptr<Ship> Player::setShip(unique_ptr<Ship> other) noexcept {
+    unique_ptr<Ship> oldShip { std::move(this->ship) };
+    this->ship = std::move(other);
     return oldShip; 
 }
 
-Player::Player() {
+Player::Player() noexcept {
     this->ship = nullptr;
     this->money = 900'000;
 }
 
-Player::~Player() {
-    delete this->ship;  
-}
-
-Player::Player(Player&& other) {
-    this->money = other.money;
-
-    this->ship = other.ship;
-    other.ship = nullptr;
-}
-Player& Player::operator=(Player&& other) {
-    if (this != &other) {
-        this->money = other.money;
-
-        if (this->ship != nullptr)
-            delete this->ship;
-        this->ship = other.ship;
-        other.ship = nullptr;
-    }
-    return *this;
-}
-
-void Player::payMoney(int amount) {
+void Player::payMoney(int amount) noexcept {
     this->money -= amount;
 }
 
-void Player::receiveMoney(int amount) {
+void Player::receiveMoney(int amount) noexcept {
     this->money += amount;
 }

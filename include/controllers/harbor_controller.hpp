@@ -9,14 +9,14 @@
 class HarborController {
 public:
     HarborController(World& w, CliViewController& cliViewController);
+    bool presentOptions();
+    void dockShip();
+private:
     void tradeCannons();
     void tradeGoods();
     void buyShip();
     void repairShip();
-    void dockShip();
     void setSail();
-    bool presentOptions();
-private:
     World& world;
     CliViewController& cliViewController;
 };

@@ -2,52 +2,16 @@
 #include "models/ship.hpp"
 #include "std/random.hpp"
 
-Harbor::Harbor() {
-    this->goodsForSale = new Vector<Good*>(true);
-    this->shipsForSale = new Vector<Ship*>(true);
-}
 Harbor::Harbor(String name) : name(name) {
-    this->goodsForSale = new Vector<Good*>(true);
-    this->shipsForSale = new Vector<Ship*>(true);
+    this->goodsForSale = unique_ptr<Vector<Good*>>(new Vector<Good*>(true));
+    this->shipsForSale = unique_ptr<Vector<Ship*>>(new Vector<Ship*>(true));
 }
-Harbor::Harbor(String name, Vector<Ship*>* shipsForSale, Vector<Good*>* goodsForSale) :
-    name(name), shipsForSale(shipsForSale), goodsForSale(goodsForSale) {
+Harbor::Harbor(String name, unique_ptr<Vector<Ship*>> shipsForSale,
+               unique_ptr<Vector<Good*>>  goodsForSale) noexcept :
+    name(name), shipsForSale(std::move(shipsForSale)), goodsForSale(std::move(goodsForSale)) {}
 
-}
-
-String Harbor::getName() const {
+String Harbor::getName() const noexcept {
     return this->name;
-}
-
-Harbor::Harbor(Harbor&& other) {
-    // stack
-    this->name = other.name;
-
-    // heap
-    this->goodsForSale = other.goodsForSale;
-    other.goodsForSale = nullptr;
-    this->shipsForSale = other.shipsForSale;
-    other.shipsForSale = nullptr;
-}
-//Harbor::Harbor(const Harbor& other) {
-//
-//}
-Harbor& Harbor::operator=(Harbor&& other) {
-    if (this != &other) {
-        // stack
-        this->name = other.name;
-
-        // heap
-        if (this->goodsForSale != nullptr)
-            delete this->goodsForSale;
-        this->goodsForSale = other.goodsForSale;
-        other.goodsForSale = nullptr;
-        if (this->shipsForSale != nullptr)
-            delete this->shipsForSale;
-        this->shipsForSale = other.shipsForSale;
-        other.shipsForSale = nullptr;
-    }
-    return *this;
 }
 
 Vector<Good*>& Harbor::getGoodsForSale() const {
@@ -63,28 +27,21 @@ void Harbor::randomizeCannonStock() {
     this->heavyCannonStock = Random::getInstance().getRandomInt(0, 2);
 }
 
-int Harbor::getLightCannonStock() const {
+int Harbor::getLightCannonStock() const noexcept {
     return this->lightCannonStock;
 }
-int Harbor::getMediumCannonStock() const {
+int Harbor::getMediumCannonStock() const noexcept {
     return this->mediumCannonStock;
 }
-int Harbor::getHeavyCannonStock() const {
+int Harbor::getHeavyCannonStock() const noexcept {
     return this->heavyCannonStock;
 }
-void Harbor::setLightCannonStock(int amount) {
+void Harbor::setLightCannonStock(int amount) noexcept {
     this->lightCannonStock = amount;
 }
-void Harbor::setMediumCannonStock(int amount) {
+void Harbor::setMediumCannonStock(int amount) noexcept {
     this->mediumCannonStock = amount;
 }
-void Harbor::setHeavyCannonStock(int amount) {
+void Harbor::setHeavyCannonStock(int amount) noexcept {
     this->heavyCannonStock = amount;
-}
-
-Harbor::~Harbor() {
-    if (shipsForSale != nullptr)
-        delete shipsForSale;
-    if (goodsForSale != nullptr)
-        delete goodsForSale;
 }

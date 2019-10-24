@@ -10,12 +10,12 @@ public:
     String(size_t size, const char* buffer);
     // copy constructor, should not kill the other value
     String(const String& other);
-    // copy assignment operator, should not kill the other value
-    String& operator=(const String& other);
     // move constructor, should kill the other value
-    String(String&& other);
+    String(String&& other) noexcept;
     // move assignment operator, should kill the other value
     String& operator=(String&& other);
+    // copy assignment operator, should not kill the other value
+    String& operator=(const String& other);
     String operator+(const String& s);
     char& operator[](size_t i) const;
     bool operator==(const String& s) const noexcept;
@@ -24,8 +24,8 @@ public:
     friend String operator<<(const String& s, int i);
     ~String();
     void append(char x);
-    size_t size() const;
-    char* c_str() const;
+    size_t size() const noexcept;
+    char* c_str() const noexcept;
     String substr(size_t from, size_t to);
     size_t find(char delim);
 private:

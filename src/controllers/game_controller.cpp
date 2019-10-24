@@ -7,11 +7,11 @@
 #include "controllers/harbor_controller.hpp"
 #include "controllers/sea_controller.hpp"
 
-GameController::GameController(World* w) : 
-    world(w) {
-    cliViewController = new CliViewController();
-    seaController = new SeaController(*w, *cliViewController);
-    harborController = new HarborController(*w, *cliViewController);
+GameController::GameController(unique_ptr<World> w)
+    : world(std::move(w)) {
+    cliViewController = unique_ptr<CliViewController>(new CliViewController());
+    seaController = unique_ptr<SeaController>(new SeaController(*world, *cliViewController));
+    harborController = unique_ptr<HarborController>(new HarborController(*world, *cliViewController));
 }
 
 void GameController::start() {
@@ -19,7 +19,7 @@ void GameController::start() {
     cliViewController->writeOutput(String("Good luck in the dangerous waters of the Caribbean."));
 
     // Choosing a starting harbor
-    bool input_failed = false;
+    bool input_failed { false };
     do {
         if (input_failed == true) {
             cliViewController->writeOutput(String("The given input was incorrect!"));
@@ -49,7 +49,7 @@ void GameController::start() {
 }
 
 void GameController::gameLoop() {
-    bool quit = false;
+    bool quit { false };
     while(((world->getPlayer().getMoney() < 1'000'000 &&
           (world->getPlayer().getShip() != nullptr &&  !world->getPlayer().getShip()->isSunken())) ||
           world->getPlayer().getShip() == nullptr) &&
@@ -64,11 +64,8 @@ void GameController::gameLoop() {
         }
         cliViewController->writeOutput(String("---------------------------------------------------------------------------------------"));
     }
-}
-
-GameController::~GameController() {
-    delete this->world;
-    delete this->seaController;
-    delete this->harborController;
-    delete this->cliViewController;
+    if(world->getPlayer().getMoney() >= 1'000'000)
+        cliViewController->writeOutput(String("You won!"));
+    else
+        cliViewController->writeOutput(String("You lost!"));
 }

@@ -9,14 +9,14 @@ SeaController::SeaController(World& w, CliViewController& cliViewController) : w
 }
 
 bool SeaController::sail() {
-    const auto s = world.getPlayer().getShip();
+    Ship* s { world.getPlayer().getShip() };
     //Sea changes
     cliViewController.writeOutput(String("Destination is: ") << s->getDestination()->getName());
     cliViewController.writeOutput(String("Destination distance is: ") << s->getDestinationDistance());
     cliViewController.writeOutput(String("Your ship has ") << s->getHealth() << " health left.");
     cliViewController.writeOutput(String("You are at sea, press enter to continue."));
     cliViewController.getInput();
-    const int battle = Random::getInstance().getRandomInt(1, 100);
+    const int battle { Random::getInstance().getRandomInt(1, 100) };
     if (battle >= 1 && battle <= 20) {
         battleController.battle(s);
     } else if (battle >= 21 && battle <= 100) {
@@ -32,8 +32,8 @@ bool SeaController::sail() {
 }
 
 void SeaController::move() {
-    auto s = world.getPlayer().getShip();
-    const int seaRandom = Random::getInstance().getRandomInt(1, 20);
+    Ship* s { world.getPlayer().getShip() };
+    const int seaRandom { Random::getInstance().getRandomInt(1, 20) };
     if (seaRandom >= 1 && seaRandom <= 2) {
         // No wind so you cannot move.
         cliViewController.writeOutput(String("Your ship did not move, there is no wind."));
@@ -67,7 +67,7 @@ void SeaController::move() {
         // 40% Chance that the ship did not move.
         // 20% Chance that the ship moved in the right direction.
         // Because ship was stuck in the storm it is also damaged 1-100%.
-        const int storm = Random::getInstance().getRandomInt(1,100);
+        const int storm { Random::getInstance().getRandomInt(1,100) };
         if (storm >= 1 && storm <= 40) {
             // Ship has gone off course.
             s->sail(-1);
@@ -82,7 +82,7 @@ void SeaController::move() {
         }
 
         // Apply damage
-        const int damage = Random::getInstance().getRandomInt(1, 100);
+        const int damage { Random::getInstance().getRandomInt(1, 100) };
         s->applyDamage(damage);
         cliViewController.writeOutput(String("Your ship got ") << damage << " damage.");
     } else {
